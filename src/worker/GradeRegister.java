@@ -2,7 +2,6 @@ package worker;
 
 import java.awt.EventQueue;
 import java.awt.Font;
-
 import javax.swing.ButtonGroup;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -18,6 +17,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.awt.event.ActionEvent;
+import javax.swing.JOptionPane;
 
 public class GradeRegister extends JFrame {
 
@@ -35,7 +35,7 @@ public class GradeRegister extends JFrame {
 	private JRadioButton rdbtnCplus;
 	private JRadioButton rdbtnC0;
 	private JRadioButton rdbtnCminus;
-	private JRadioButton rdbtF;
+	private JRadioButton rdbtnF;
 	private JRadioButton rdbtnP;
 	private JRadioButton rdbtnNP;
 	private JLabel textSemester;
@@ -51,8 +51,8 @@ public class GradeRegister extends JFrame {
 	public static WorkerStart start_frame = null;
 
 	private static final String url = "jdbc:mysql://localhost:3306/DB2024";
-	private static final String username = "";
-	private static final String password = "";
+	private static final String username = "your_username";
+	private static final String password = "your_password";
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -94,61 +94,73 @@ public class GradeRegister extends JFrame {
 
 		rdbtnAplus = new JRadioButton("A+");
 		rdbtnAplus.setBounds(136, 122, 49, 23);
+		rdbtnAplus.setActionCommand("A+");
 		bg.add(rdbtnAplus);
 		panel.add(rdbtnAplus);
 
 		rdbtnA0 = new JRadioButton("A0");
 		rdbtnA0.setBounds(188, 122, 49, 23);
+		rdbtnA0.setActionCommand("A0");
 		bg.add(rdbtnA0);
 		panel.add(rdbtnA0);
 
 		rdbtnAminus = new JRadioButton("A-");
 		rdbtnAminus.setBounds(240, 122, 49, 23);
+		rdbtnAminus.setActionCommand("A-");
 		bg.add(rdbtnAminus);
 		panel.add(rdbtnAminus);
 
 		rdbtnBplus = new JRadioButton("B+");
 		rdbtnBplus.setBounds(292, 122, 49, 23);
+		rdbtnBplus.setActionCommand("B+");
 		bg.add(rdbtnBplus);
 		panel.add(rdbtnBplus);
 
 		rdbtnB0 = new JRadioButton("B0");
 		rdbtnB0.setBounds(344, 122, 49, 23);
+		rdbtnB0.setActionCommand("B0");
 		bg.add(rdbtnB0);
 		panel.add(rdbtnB0);
 
 		rdbtnBminus = new JRadioButton("B-");
 		rdbtnBminus.setBounds(396, 122, 49, 23);
+		rdbtnBminus.setActionCommand("B-");
 		bg.add(rdbtnBminus);
 		panel.add(rdbtnBminus);
 
 		rdbtnCplus = new JRadioButton("C+");
 		rdbtnCplus.setBounds(448, 122, 49, 23);
+		rdbtnCplus.setActionCommand("C+");
 		bg.add(rdbtnCplus);
 		panel.add(rdbtnCplus);
 
 		rdbtnC0 = new JRadioButton("C0");
 		rdbtnC0.setBounds(500, 122, 49, 23);
+		rdbtnC0.setActionCommand("C0");
 		bg.add(rdbtnC0);
 		panel.add(rdbtnC0);
 
 		rdbtnCminus = new JRadioButton("C-");
 		rdbtnCminus.setBounds(552, 122, 49, 23);
+		rdbtnCminus.setActionCommand("C-");
 		bg.add(rdbtnCminus);
 		panel.add(rdbtnCminus);
 
-		rdbtF = new JRadioButton("F");
-		rdbtF.setBounds(604, 122, 39, 23);
-		bg.add(rdbtF);
-		panel.add(rdbtF);
+		rdbtnF = new JRadioButton("F");
+		rdbtnF.setBounds(604, 122, 39, 23);
+		rdbtnF.setActionCommand("F");
+		bg.add(rdbtnF);
+		panel.add(rdbtnF);
 
 		rdbtnP = new JRadioButton("P");
 		rdbtnP.setBounds(646, 122, 49, 23);
+		rdbtnP.setActionCommand("P");
 		bg.add(rdbtnP);
 		panel.add(rdbtnP);
 
 		rdbtnNP = new JRadioButton("NP");
 		rdbtnNP.setBounds(698, 122, 61, 23);
+		rdbtnNP.setActionCommand("NP");
 		bg.add(rdbtnNP);
 		panel.add(rdbtnNP);
 
@@ -187,7 +199,6 @@ public class GradeRegister extends JFrame {
 		homeButton = new JButton("home");
 		homeButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-
 				start_frame = new WorkerStart();
 				start_frame.setVisible(true);
 				setVisible(false);
@@ -200,48 +211,16 @@ public class GradeRegister extends JFrame {
 
 		btnRegister.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String selectedrb = null;
-				if (rdbtnAplus.isSelected()) {
-					selectedrb = rdbtnAplus.getActionCommand();
-				} else if (rdbtnA0.isSelected()) {
-					selectedrb = rdbtnA0.getActionCommand();
-				} else if (rdbtnAminus.isSelected()) {
-					selectedrb = rdbtnAminus.getActionCommand();
-				} else if (rdbtnBplus.isSelected()) {
-					selectedrb = rdbtnBplus.getActionCommand();
-				} else if (rdbtnB0.isSelected()) {
-					selectedrb = rdbtnB0.getActionCommand();
-				} else if (rdbtnBminus.isSelected()) {
-					selectedrb = rdbtnBminus.getActionCommand();
-				} else if (rdbtnCplus.isSelected()) {
-					selectedrb = rdbtnCplus.getActionCommand();
-				} else if (rdbtnC0.isSelected()) {
-					selectedrb = rdbtnC0.getActionCommand();
-				} else if (rdbtnCminus.isSelected()) {
-					selectedrb = rdbtnCminus.getActionCommand();
-				} else if (rdbtF.isSelected()) {
-					selectedrb = rdbtF.getActionCommand();
-				} else if (rdbtnP.isSelected()) {
-					selectedrb = rdbtnP.getActionCommand();
-				} else if (rdbtnNP.isSelected()) {
-					selectedrb = rdbtnNP.getActionCommand();
-				}
-
+				String selectedrb = bg.getSelection().getActionCommand();
 				String searchedSemester = textFieldSemester.getText(); // 학기 가져오기 (ex 1-1, 1-2, 2-1..)
 				String searchedCourse = textFieldCourse.getText(); // 강의 가져오기 (강의명 Or 강의id)
 				String searchedStudent = textFieldStudent.getText(); // 학생 가져오기 (학생명 Or 학생id)
-
-				System.out.println(selectedrb);
-				System.out.println(searchedSemester);
-				System.out.println(searchedCourse);
-				System.out.println(searchedStudent);
 
 				registerGrade(selectedrb, searchedSemester, searchedCourse, searchedStudent);
 			}
 		});
 		btnRegister.setBounds(653, 457, 117, 29);
 		panel.add(btnRegister);
-
 	}
 
 	private void registerGrade(String selectedrb, String semester, String searchedCourse, String searchedStudent) {
@@ -252,7 +231,7 @@ public class GradeRegister extends JFrame {
 			CourseID = Integer.parseInt(searchedCourse); // integer형으로 바뀐다면, 즉 강의명이 아닌 강의id라면
 		} catch (NumberFormatException e) { // 강의명을 입력으로 받아왔다면
 			try {
-				sql = "SELECT CourseID FROM DB2024_COURSES WHERE CourseName=?"; // sql문 만들어서 courseid 찾아오기
+				sql = "SELECT CourseID FROM DB2024_Course WHERE CourseName=?"; // sql문 만들어서 courseid 찾아오기
 
 				Class.forName("com.mysql.cj.jdbc.Driver");
 				Connection connection = DriverManager.getConnection(url, username, password);
@@ -264,7 +243,6 @@ public class GradeRegister extends JFrame {
 					CourseID = resultSet.getInt("CourseID");
 					System.out.println("CourseID: " + CourseID);
 				} else {
-
 					System.out.println("결과가 없습니다.");
 				}
 
@@ -279,7 +257,7 @@ public class GradeRegister extends JFrame {
 			StudentID = Integer.parseInt(searchedStudent); // integer형으로 바뀐다면, 즉 학생 이름이 아닌 학생id라면
 		} catch (NumberFormatException e) { // 학생이름으로 입력 받아왔다면
 			try {
-				sql = "SELECT StudentID FROM DB2024_STUDENTS WHERE Name=?"; // sql문 만들어서 학생id 찾아오기
+				sql = "SELECT StudentID FROM DB2024_Student WHERE Name=?"; // sql문 만들어서 학생id 찾아오기
 
 				Class.forName("com.mysql.cj.jdbc.Driver");
 				Connection connection = DriverManager.getConnection(url, username, password);
@@ -291,7 +269,6 @@ public class GradeRegister extends JFrame {
 					StudentID = resultSet.getInt("StudentID");
 					System.out.println("StudentID: " + StudentID);
 				} else {
-
 					System.out.println("결과가 없습니다.");
 				}
 
@@ -301,10 +278,10 @@ public class GradeRegister extends JFrame {
 		}
 		// 아래는 등록과정
 		try {
-			sql = "INSERT INTO DB2024_GRADES(StudentId, CourseId, Grade, Semester) VALUES (?, ?, ?, ?)";
+			sql = "INSERT INTO DB2024_Grade(StudentID, CourseID, Grade, Semester) VALUES (?, ?, ?, ?)";
 
 			// 재수강여부확인 (등록을 실행하기 전 먼저 studentid, courseid로 이미 데이터가 존재하는지 확인 후 넣기)
-			String sql_re = "SELECT count(*) FROM DB2024_GRADES WHERE StudentId=? AND CourseId=?";
+			String sql_re = "SELECT count(*) FROM DB2024_Grade WHERE StudentID=? AND CourseID=?";
 
 			try {
 				Class.forName("com.mysql.cj.jdbc.Driver");
@@ -319,7 +296,7 @@ public class GradeRegister extends JFrame {
 				if (resultSet_re.next()) {
 					int count = resultSet_re.getInt(1);
 					if (count > 0) {
-						sql = "INSERT INTO DB2024_GRADES(StudentId, CourseId, Grade, Semester, Repetition) VALUES (?, ?, ?, ?, TRUE)";
+						sql = "INSERT INTO DB2024_Grade(StudentID, CourseID, Grade, Semester, Repetition) VALUES (?, ?, ?, ?, TRUE)";
 						System.out.println(StudentID + " 학생은 재수강을 했습니다.");
 					}
 				}
@@ -355,5 +332,4 @@ public class GradeRegister extends JFrame {
 			e.printStackTrace();
 		}
 	}
-
 }

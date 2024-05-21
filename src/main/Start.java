@@ -17,6 +17,7 @@ import java.awt.Font;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.sql.Connection;
 
 public class Start extends JFrame{
 	private JPanel contentPane;
@@ -100,7 +101,13 @@ public class Start extends JFrame{
 		btn3.setBounds(544, 231, 131, 55);
 		btn3.setFont(new Font("굴림", Font.PLAIN, 22));
 		panel.add(btn3);
+
+		// 데이터베이스 연결 테스트
+		Connection connection = DatabaseConnection.getConnection();
+		if (connection != null) {
+			System.out.println("데이터베이스 연결 성공!");
+		} else {
+			System.out.println("데이터베이스 연결 실패!");
+		}
 	}
-
-
 }

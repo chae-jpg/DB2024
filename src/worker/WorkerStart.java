@@ -33,7 +33,7 @@ public class WorkerStart extends JFrame {
 	public static ProfessorManagement professor_management_frame = null;
 	public static CourseManagement course_management_frame = null;
 	public static GradeManagement grade_management_frame = null;
-	public static CourseEvaluationManagemet course_evaluation_management_frame = null;
+	public static CourseEvaluationManagement course_evaluation_management_frame = null;
 	public static Start start_frame = null;
 	private JButton homeButton;
 	
@@ -106,7 +106,7 @@ public class WorkerStart extends JFrame {
 		btn5.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
-				course_evaluation_management_frame = new CourseEvaluationManagemet();
+				course_evaluation_management_frame = new CourseEvaluationManagement();
 				course_evaluation_management_frame.setVisible(true);
 				setVisible(false);
 				

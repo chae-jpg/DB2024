@@ -2,19 +2,12 @@ package worker;
 
 import java.awt.EventQueue;
 import java.awt.Font;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JTable;
-import javax.swing.JTextField;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-
-import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import javax.swing.JLabel;
+import java.awt.event.ActionListener;
+import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableModel;
+import java.util.List;
 
 public class ProfessorManagement extends JFrame {
 
@@ -25,13 +18,14 @@ public class ProfessorManagement extends JFrame {
 	private JButton btnSearch;
 	private JTextField searchTextField;
 	private JButton homeButton;
-	private JComboBox comboBox;
+	private JComboBox<String> comboBox;
 	private JTable table;
+	private DefaultTableModel tableModel;
 	private JButton btnRegister;
 	private JButton btnModify;
 	private JButton btnDelete;
-
 	public static WorkerStart start_frame = null;
+	private ProfessorDAO professorDAO;
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -46,10 +40,11 @@ public class ProfessorManagement extends JFrame {
 		});
 	}
 
-
 	public ProfessorManagement() {
+		professorDAO = new ProfessorDAO();
+
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 800, 543);
+		setBounds(100, 100, 800, 600);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -73,7 +68,9 @@ public class ProfessorManagement extends JFrame {
 		btnSearch = new JButton("검색");
 		btnSearch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-
+				String selectedItem = (String) comboBox.getSelectedItem();
+				String searchText = searchTextField.getText();
+				searchProfessors(selectedItem, searchText);
 			}
 		});
 		btnSearch.setBounds(554, 97, 58, 29);
@@ -82,7 +79,6 @@ public class ProfessorManagement extends JFrame {
 		homeButton = new JButton("home");
 		homeButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-
 				start_frame = new WorkerStart();
 				start_frame.setVisible(true);
 				setVisible(false);
@@ -99,15 +95,19 @@ public class ProfessorManagement extends JFrame {
 		comboBox.setBounds(101, 98, 101, 27);
 		panel.add(comboBox);
 
-		table = new JTable();
-		table.setBounds(50, 150, 700, 300);
-		panel.add(table);
+		tableModel = new DefaultTableModel(
+				new Object[][] {},
+				new String[] { "ProfessorID", "Name", "Department", "Email", "Phone", "Password" }
+		);
+		table = new JTable(tableModel);
+		JScrollPane scrollPane = new JScrollPane(table);
+		scrollPane.setBounds(50, 150, 700, 300);
+		panel.add(scrollPane);
 
 		btnRegister = new JButton("등록");
 		btnRegister.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				// 등록 버튼 눌렀을 때
-
+				openProfessorForm(null);
 			}
 		});
 		btnRegister.setBounds(537, 457, 75, 29);
@@ -116,8 +116,14 @@ public class ProfessorManagement extends JFrame {
 		btnModify = new JButton("수정");
 		btnModify.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				// 수정 버튼 눌렀을 때
-
+				int selectedRow = table.getSelectedRow();
+				if (selectedRow >= 0) {
+					int professorID = (int) tableModel.getValueAt(selectedRow, 0);
+					Professor professor = professorDAO.getProfessorsById(professorID).get(0);
+					openProfessorForm(professor);
+				} else {
+					JOptionPane.showMessageDialog(panel, "수정할 교수를 선택하세요.", "수정 오류", JOptionPane.ERROR_MESSAGE);
+				}
 			}
 		});
 		btnModify.setBounds(605, 457, 75, 29);
@@ -126,13 +132,56 @@ public class ProfessorManagement extends JFrame {
 		btnDelete = new JButton("삭제");
 		btnDelete.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				// 삭제 버튼 눌렀을 때
-
+				int selectedRow = table.getSelectedRow();
+				if (selectedRow >= 0) {
+					int professorID = (int) tableModel.getValueAt(selectedRow, 0);
+					professorDAO.deleteProfessor(professorID);
+					displayProfessors(professorDAO.getProfessorsByName("")); // 모든 교수를 다시 로드
+				} else {
+					JOptionPane.showMessageDialog(panel, "삭제할 교수를 선택하세요.", "삭제 오류", JOptionPane.ERROR_MESSAGE);
+				}
 			}
 		});
 		btnDelete.setBounds(675, 457, 75, 29);
 		panel.add(btnDelete);
-
 	}
 
+	private void searchProfessors(String criteria, String value) {
+		List<Professor> professors;
+		if (criteria.equals("교수명")) {
+			professors = professorDAO.getProfessorsByName(value);
+		} else if (criteria.equals("교수id")) {
+			int professorID = Integer.parseInt(value);
+			professors = professorDAO.getProfessorsById(professorID);
+		} else {
+			professors = professorDAO.getProfessorsByDepartment(value);
+		}
+		displayProfessors(professors);
+	}
+
+	private void displayProfessors(List<Professor> professors) {
+		tableModel.setRowCount(0); // Clear existing rows
+		for (Professor professor : professors) {
+			tableModel.addRow(new Object[] {
+					professor.getProfessorID(), professor.getName(), professor.getDepartment(), professor.getEmail(),
+					professor.getPhone(), professor.getPassword()
+			});
+		}
+	}
+
+	private void openProfessorForm(Professor professor) {
+		boolean isEditMode = (professor != null);
+		ProfessorForm professorForm = new ProfessorForm(this, professor, isEditMode);
+		professorForm.setVisible(true);
+
+		Professor result = professorForm.getProfessor();
+		if (result != null) {
+			if (isEditMode) {
+				professorDAO.updateProfessor(result);
+			} else {
+				professorDAO.addProfessor(result);
+			}
+			displayProfessors(professorDAO.getProfessorsByName("")); // 모든 교수를 다시 로드
+		}
+	}
 }
