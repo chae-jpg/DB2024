@@ -23,6 +23,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
@@ -121,6 +122,12 @@ public class ProfessorGradeDelete extends JFrame {
 		table = new JTable();
 		table.setBounds(50, 150, 700, 150);
 		panel.add(table);
+		
+
+        JScrollPane pane = new JScrollPane(table);
+        pane.setBounds(50, 150, 700, 150);
+        panel.add(pane);
+
 
 		table.addMouseListener(new MouseAdapter() { // table에서 MouseListener를 생성해 선택한 값을 가져올 수 있게 하였다.
 			public void mouseClicked(MouseEvent e) {
