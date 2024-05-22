@@ -18,6 +18,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
@@ -122,6 +123,12 @@ public class GradeViewStudent extends JFrame {
 		table.setBounds(50, 150, 700, 300);
 		panel.add(table);
 
+
+        JScrollPane pane = new JScrollPane(table);
+        pane.setBounds(50, 150, 700, 300);
+        panel.add(pane);
+
+		
 		averageLabel = new JLabel("평균 학점 : ");
 		averageLabel.setBounds(50, 460, 200, 25);
 		panel.add(averageLabel);
