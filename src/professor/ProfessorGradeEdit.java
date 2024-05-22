@@ -1,4 +1,5 @@
 package professor;
+
 /*
  * 교수 - 성적 수정: 교수는 자신이 맡은 강의만 수정이 가능하다. 
  */
@@ -26,7 +27,6 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
-
 
 public class ProfessorGradeEdit extends JFrame {
 
@@ -83,23 +83,23 @@ public class ProfessorGradeEdit extends JFrame {
 		title.setBounds(332, 24, 101, 55);
 		panel.add(title);
 
-		searchTextField = new JTextField("학번 or 강의id를 입력하세요"); //입력으로 학번 또는 강의 id를 받아온다. 
+		searchTextField = new JTextField("학번 or 강의id를 입력하세요"); // 입력으로 학번 또는 강의 id를 받아온다.
 		searchTextField.setBounds(214, 97, 344, 26);
 		panel.add(searchTextField);
 		searchTextField.setColumns(10);
 
-		btnSearch = new JButton("검색"); //자신의 강의만 검색이 가능하다. 
+		btnSearch = new JButton("검색"); // 자신의 강의만 검색이 가능하다.
 		btnSearch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String selectedItem = (String) comboBox.getSelectedItem();
 				String searchText = searchTextField.getText();
-				searchGrade(selectedItem, searchText); 
+				searchGrade(selectedItem, searchText);
 			}
 		});
 		btnSearch.setBounds(554, 97, 58, 29);
 		panel.add(btnSearch);
 
-		homeButton = new JButton("home");  // StartProfessor로 가는 홈 버튼 생성했다. 
+		homeButton = new JButton("home"); // StartProfessor로 가는 홈 버튼 생성했다.
 		homeButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				start_professor_frame = new StartProfessor();
@@ -122,22 +122,22 @@ public class ProfessorGradeEdit extends JFrame {
 		table.setBounds(50, 150, 700, 150);
 		panel.add(table);
 
-        JScrollPane pane = new JScrollPane(table);
-        pane.setBounds(50, 150, 700, 150);
-        panel.add(pane);
+		JScrollPane pane = new JScrollPane(table);
+		pane.setBounds(50, 150, 700, 150);
+		panel.add(pane);
 
 		table.addMouseListener(new MouseAdapter() { // table에서 MouseListener를 생성해 선택한 값을 가져올 수 있게 하였다.
-		    public void mouseClicked(MouseEvent e) {
-		        int selectedRow = table.getSelectedRow();
-		        if (selectedRow != -1) {
-		            studentIdField.setText(table.getValueAt(selectedRow, 0).toString());
-		            courseIdField.setText(table.getValueAt(selectedRow, 1).toString());
-		            gradeField.setText(table.getValueAt(selectedRow, 2).toString());
-		            semesterField.setText(table.getValueAt(selectedRow, 3).toString());
-		        }
-		    }
+			public void mouseClicked(MouseEvent e) {
+				int selectedRow = table.getSelectedRow();
+				if (selectedRow != -1) {
+					studentIdField.setText(table.getValueAt(selectedRow, 0).toString());
+					courseIdField.setText(table.getValueAt(selectedRow, 1).toString());
+					gradeField.setText(table.getValueAt(selectedRow, 2).toString());
+					semesterField.setText(table.getValueAt(selectedRow, 3).toString());
+				}
+			}
 		});
-		
+
 		btnOkay = new JButton("확인");// 확인을 누르면 updateGrade 메서드가 실행된다.
 		btnOkay.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -182,7 +182,7 @@ public class ProfessorGradeEdit extends JFrame {
 	}
 
 	private void searchGrade(String selectedItem, String searchText) {
-		
+
 		String id = Professor.getInstance().getId();
 		String sql = "";
 
@@ -225,70 +225,65 @@ public class ProfessorGradeEdit extends JFrame {
 			resultSet.close();
 			statement.close();
 			connection.close();
-			
+
 		} catch (ClassNotFoundException | SQLException e) {
 			e.printStackTrace();
 		}
 	}
 
 	private void updateGrade() {
-		
+
 		// 선택한 것 중에 GradeID가 가장 최신 거 가져왔다. (재수강 데이터를 존재할 수 있기 떄문 )
-		String sql = "SELECT GradeID FROM DB2024_Grade "
-	            + "WHERE StudentID = ? AND CourseID = ? "
-	            + "ORDER BY GradeID "
-	            + "LIMIT 1;";
-		
+		String sql = "SELECT GradeID FROM DB2024_Grade " + "WHERE StudentID = ? AND CourseID = ? " + "ORDER BY GradeID "
+				+ "LIMIT 1;";
+
 		int gradeID = 0;
-		
+
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			Connection connection = DriverManager.getConnection(url, username, password);
 
 			PreparedStatement statement = connection.prepareStatement(sql);
-			
+
 			statement.setString(1, studentIdField.getText());
 			statement.setString(2, courseIdField.getText());
 
 			ResultSet resultSet = statement.executeQuery();
 
 			if (resultSet.next()) {
-			    gradeID = resultSet.getInt("GradeID");
-			} 
+				gradeID = resultSet.getInt("GradeID");
+			}
 			statement.close();
-		
-	        connection.close();
-	    } catch (ClassNotFoundException | SQLException e) {
-	        e.printStackTrace();
-	    }
-		
-		// 이 sql은 업데이트 하기 위한 것이다. 
-		sql = "UPDATE DB2024_Grade SET Grade = ? "
-		        + "WHERE GradeId = ?";
+
+			connection.close();
+		} catch (ClassNotFoundException | SQLException e) {
+			e.printStackTrace();
+		}
+
+		// 이 sql은 업데이트 하기 위한 것이다.
+		sql = "UPDATE DB2024_Grade SET Grade = ? " + "WHERE GradeId = ?";
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			Connection connection = DriverManager.getConnection(url, username, password);
 
 			PreparedStatement statement = connection.prepareStatement(sql);
-			
+
 			statement.setString(1, gradeField.getText());
 			statement.setLong(2, gradeID);
-			
-			
-			
+
 			int rowsUpdated = statement.executeUpdate();// 영향을 받은 갯수를 통해 수정 여부를 확인할 수 있다.
 
-	        if (rowsUpdated > 0) {// 0보다 크다면 수정이 완료된 것이다.
-	            JOptionPane.showMessageDialog(this, "성적이 수정되었습니다.");
-	        } else {
-	        	// 0이라면 수정된 행이 존재하지 않는다. 
-	            JOptionPane.showMessageDialog(this, "성적의 수정에 실패했습니다.");
-	        }
+			if (rowsUpdated > 0) {// 0보다 크다면 수정이 완료된 것이다.
+				JOptionPane.showMessageDialog(this, "성적이 수정되었습니다.");
+			} else {
+				// 0이라면 수정된 행이 존재하지 않는다.
+				JOptionPane.showMessageDialog(this, "성적의 수정에 실패했습니다.");
+			}
 
 			statement.close();
-	        connection.close();
+			connection.close();
 		} catch (ClassNotFoundException | SQLException e) {
-	        e.printStackTrace();
-	    }
+			e.printStackTrace();
+		}
 	}
 }

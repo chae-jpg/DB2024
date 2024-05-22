@@ -122,11 +122,10 @@ public class ProfessorGradeManagement extends JFrame {
 		table = new JTable();
 		table.setBounds(50, 150, 700, 300);
 		panel.add(table);
-		
-        JScrollPane pane = new JScrollPane(table);
-        pane.setBounds(50, 150, 700, 300);
-        panel.add(pane);
 
+		JScrollPane pane = new JScrollPane(table);
+		pane.setBounds(50, 150, 700, 300);
+		panel.add(pane);
 
 		btnRegister = new JButton("등록");
 		btnRegister.addActionListener(new ActionListener() {
@@ -172,11 +171,16 @@ public class ProfessorGradeManagement extends JFrame {
 		String sql = "";
 
 		if (selectedItem.equalsIgnoreCase("학번")) {
-			sql = "SELECT g.CourseID, c.CourseName, g.StudentID, s.Name, g.Grade, g.Semester, g.Repetition " //학생명과 강의명도 나오게 수정했습니다. 
+			sql = "SELECT g.CourseID, c.CourseName, g.StudentID, s.Name, g.Grade, g.Semester, g.Repetition " // 학생명과
+																												// 강의명도
+																												// 나오게
+																												// 수정했습니다.
 					+ "FROM DB2024_Grade g, DB2024_Student s, DB2024_Course c "
 					+ "WHERE g.StudentID = s.StudentID AND g.CourseID = c.CourseID AND g.StudentID = ?";
 		} else if (selectedItem.equalsIgnoreCase("강의id")) {
-			sql = "SELECT g.CourseID, c.CourseName, g.StudentID, s.Name, g.Grade, g.Semester, g.Repetition "//학생명과 강의명도 나오게 수정했습니다. 
+			sql = "SELECT g.CourseID, c.CourseName, g.StudentID, s.Name, g.Grade, g.Semester, g.Repetition "// 학생명과 강의명도
+																											// 나오게
+																											// 수정했습니다.
 					+ "FROM DB2024_Grade g, DB2024_Student s, DB2024_Course c "
 					+ "WHERE g.StudentID = s.StudentID AND g.CourseID = c.CourseID AND g.CourseID = ?";
 		}

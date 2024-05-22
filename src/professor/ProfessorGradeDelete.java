@@ -100,7 +100,7 @@ public class ProfessorGradeDelete extends JFrame {
 		btnSearch.setBounds(554, 97, 58, 29);
 		panel.add(btnSearch);
 
-		homeButton = new JButton("home"); // StartProfessor로 가는 홈 버튼 생성했다. 
+		homeButton = new JButton("home"); // StartProfessor로 가는 홈 버튼 생성했다.
 		homeButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				start_professor_frame = new StartProfessor();
@@ -122,12 +122,10 @@ public class ProfessorGradeDelete extends JFrame {
 		table = new JTable();
 		table.setBounds(50, 150, 700, 150);
 		panel.add(table);
-		
 
-        JScrollPane pane = new JScrollPane(table);
-        pane.setBounds(50, 150, 700, 150);
-        panel.add(pane);
-
+		JScrollPane pane = new JScrollPane(table);
+		pane.setBounds(50, 150, 700, 150);
+		panel.add(pane);
 
 		table.addMouseListener(new MouseAdapter() { // table에서 MouseListener를 생성해 선택한 값을 가져올 수 있게 하였다.
 			public void mouseClicked(MouseEvent e) {
@@ -225,7 +223,7 @@ public class ProfessorGradeDelete extends JFrame {
 				}
 				model.addRow(row);
 			}
-			
+
 			resultSet.close();
 			statement.close();
 			connection.close();
