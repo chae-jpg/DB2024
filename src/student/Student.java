@@ -7,7 +7,7 @@ public class Student {
 
 	public static Student getInstance() {
 		if (student == null) {
-			student = new Studnet();
+			student = new Student();
 		}
 		return student;
 	}
