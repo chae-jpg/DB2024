@@ -39,8 +39,10 @@ public class StudentLogin extends JFrame{
 	
 	
 	private static final String url = "jdbc:mysql://localhost:3306/DB2024Team04";
-	private static final String username = "";
-	private static final String password = "";
+
+	private static final String username = "root";
+	private static final String password = "root";
+
 	
 	public StudentLogin() {
 		
@@ -150,4 +152,6 @@ public class StudentLogin extends JFrame{
 		
 	}
 
+
 }
+

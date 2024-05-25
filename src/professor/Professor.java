@@ -9,6 +9,7 @@ public class Professor {
 	private String id;
 
 	public static Professor getInstance() { //instance를 싱글톤으로 만들기 
+
 		if (professor == null) {
 			professor = new Professor();
 		}
@@ -24,3 +25,4 @@ public class Professor {
 	}
 
 }
+

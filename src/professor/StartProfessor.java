@@ -6,6 +6,9 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import worker.SearchTimeTable;
+
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import java.awt.Font;
@@ -28,6 +31,7 @@ public class StartProfessor extends JFrame {
 	public static ProfessorManagement professor_management_frame = null;
 	public static ProfessorStudentsByCourse student_by_course_frame = null;
 	public static ProfessorGradeManagement grade_management_frame = null;
+	public static TimetableProfessor timetable_frame = null;
 	
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -108,10 +112,12 @@ public class StartProfessor extends JFrame {
 		panel.add(btn4);
 		
 
-		btn5 = new JButton("5. 시간표 조회"); //교수님 개인의 시간표 조회 가능하게 
+		btn5 = new JButton("5. 시간표 조회"); 
 		btn5.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+				timetable_frame = new TimetableProfessor();
+				timetable_frame.setVisible(true);
+				setVisible(false);
 				
 			}
 		});
