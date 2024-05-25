@@ -1,0 +1,7 @@
+package student;
+import java.awt.*;
+import javax.swing.*;
+
+public class CourseEvaluationModify extends JFrame {
+
+}

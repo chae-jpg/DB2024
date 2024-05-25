@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<qualifiedTypeNameHistroy>
+    <fullyQualifiedTypeName name="javax.swing.table.TableColumnModel"/>
+    <fullyQualifiedTypeName name="javax.swing.table.TableCellRenderer"/>
+    <fullyQualifiedTypeName name="java.awt.Component"/>
+    <fullyQualifiedTypeName name="javax.swing.table.JTableHeader"/>
+    <fullyQualifiedTypeName name="javax.swing.JScrollPane"/>
+</qualifiedTypeNameHistroy>
