@@ -12,9 +12,16 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 
 import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.Vector;
 import java.awt.event.ActionEvent;
 import javax.swing.JLabel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableModel;
 
 public class ProfessorManagement extends JFrame {
 
@@ -30,6 +37,7 @@ public class ProfessorManagement extends JFrame {
 	private JButton btnRegister;
 	private JButton btnModify;
 	private JButton btnDelete;
+	String sql_query="";
 
 	public static StartProfessor start_professor_frame = null;
 
@@ -70,8 +78,75 @@ public class ProfessorManagement extends JFrame {
 		searchTextField.setColumns(10);
 
 		btnSearch = new JButton("검색");
+Vector<String> header = new Vector<String>();
+        
+        header.add("교수ID");
+        header.add("이름");
+        header.add("소속학과");
+        header.add("이메일");
+        header.add("전화번호");
+
+		DefaultTableModel model =new DefaultTableModel(header,0);
+		
 		btnSearch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				model.setNumRows(0);// 이전 검색결과 삭제용
+				switch (comboBox.getSelectedIndex()){
+				 case 0:
+				      sql_query = String.format("select *  from DB2024_Professor where Name='%s';",searchTextField.getText());
+				      
+
+				 break;
+				 
+				 case 1:
+				      sql_query = String.format("select * from DB2024_Professor where ProfessorID =%d;",Integer.valueOf(searchTextField.getText()));
+
+				 break;
+				 
+				 case 2:
+				      sql_query = String.format("select * from DB2024_Professor where Department='%s';",searchTextField.getText());
+
+				 break;
+				 
+				 
+				 }//switch
+			
+				
+				 
+				 try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/DB2024Team04", "root", "root");
+								 Statement stmt = conn.createStatement(); )
+								 {
+								 
+								
+								 //검색 쿼리
+
+								 
+							
+								 ResultSet rset = stmt.executeQuery(sql_query);
+								
+								 while( rset.next()) {
+									 
+									 String id =Integer.toString(rset.getInt("ProfessorID"));
+									 String name  =rset.getString("Name");
+									 String department =rset.getString("Department");									 
+									 String email  =rset.getString("Email");
+									 String phone =rset.getString("Phone");
+									 
+									 
+									 
+									 String[] data= {id,name,department,email,phone};
+									 model.addRow(data);
+									 
+									 
+									
+								 }	//while
+								
+											 
+								 }//try
+								 
+								 catch (SQLException sqle) {
+								 System.out.println("SQLException : " + sqle);
+								 }//catch
 
 			}
 		});
@@ -98,7 +173,7 @@ public class ProfessorManagement extends JFrame {
 		comboBox.setBounds(101, 98, 101, 27);
 		panel.add(comboBox);
 
-		table = new JTable();
+		table = new JTable(model);
 		table.setBounds(50, 150, 700, 300);
 		panel.add(table);
 

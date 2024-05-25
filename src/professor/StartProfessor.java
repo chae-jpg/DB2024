@@ -1,3 +1,4 @@
+
 package professor;
 
 import java.awt.EventQueue;
@@ -128,3 +129,4 @@ public class StartProfessor extends JFrame {
 		
 	}
 }
+

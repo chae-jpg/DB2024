@@ -1,3 +1,4 @@
+
 package student;
 
 import java.awt.Component;
@@ -296,3 +297,4 @@ public class CourseEvaluationManagementStudent extends JFrame {
         panel.add(scrollPane);
 	}
 }
+

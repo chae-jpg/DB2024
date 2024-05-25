@@ -1,3 +1,4 @@
+
 package professor;
 
 /* 교수님은 자기가 담당하는 과목 성적의 입력, 수정, 삭제 가능하다. 
@@ -218,3 +219,4 @@ public class ProfessorGradeManagement extends JFrame {
 		}
 	}
 }
+

@@ -1,3 +1,4 @@
+
 package student;
 
 import java.awt.EventQueue;
@@ -266,3 +267,4 @@ public class GradeViewStudent extends JFrame {
 	}
 
 }
+

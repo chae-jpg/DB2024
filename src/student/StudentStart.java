@@ -1,3 +1,4 @@
+
 package student;
 
 import java.awt.EventQueue;
@@ -130,4 +131,5 @@ public class StudentStart extends JFrame {
 		
 		
 	}
+
 }
