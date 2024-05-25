@@ -1,10 +1,15 @@
-package student;
+package professor;
 
 import java.awt.Component;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
@@ -17,16 +22,10 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.JTableHeader;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumnModel;
 
-import java.sql.*;
-import javax.swing.JList;
-import javax.swing.JOptionPane;
-import javax.swing.AbstractListModel;
-
-public class CourseEvaluationManagementStudent extends JFrame {
+public class CourseEvaluationManagemet extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
@@ -37,14 +36,10 @@ public class CourseEvaluationManagementStudent extends JFrame {
 	private JButton homeButton;
 	private JComboBox comboBox;
 	private JTable table;
-	private JButton btnRegister;
-    private JButton btnModify;
-    private JButton btnDelete;
 
-	public static StudentStart start_frame=null;
-	public static CourseEvaluationModify modify_frame = null;
-	public static CourseEvaluationAdd add_frame = null;
-	
+	public static StartProfessor start_frame=null;
+
+
 	//JDBC driver name and database URL
 	static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";  
 	static final String DB_URL = "jdbc:mysql://localhost/DB2024team04";
@@ -52,23 +47,6 @@ public class CourseEvaluationManagementStudent extends JFrame {
 	// MySQL 계정과 암호 입력
 	static final String USER = "root";
 	static final String PASS = "root";
-	
-	public boolean checkValid(int id) {
-		String sql = "Select studentid from DB2024_EVALUATION where evaluationid = ?";
-		try {
-			Connection conn = DriverManager.getConnection(DB_URL,USER, PASS);
-			PreparedStatement pStmt = conn.prepareStatement(sql);
-			pStmt.setInt(1, id);
-			ResultSet rs1 = pStmt.executeQuery();
-			if(rs1.next()) {
-				return (rs1.getInt(1) == Integer.parseInt(Student.getInstance().getStudentId()));
-			}
-		} catch(SQLException se) {
-			se.printStackTrace();
-		}
-		return false;
-		
-	}
 	
 	public void resizeColumnWidth(JTable table) {
 	    final TableColumnModel columnModel = table.getColumnModel();
@@ -90,10 +68,10 @@ public class CourseEvaluationManagementStudent extends JFrame {
         String sql = "";
 
         if (selectedItem.equals("강의명")) {
-            sql = "SELECT evaluationid, score, date, comment, courseid FROM DB2024_EVALUATION WHERE "
+            sql = "SELECT * FROM DB2024_EVALUATION WHERE "
             		+ "CourseID = (SELECT CourseID From DB2024_COURSE WHERE CourseName=?)";
         } else if (selectedItem.equals("학수번호")) {
-            sql = "SELECT evaluationid, score, date, comment, courseid FROM DB2024_EVALUATION WHERE CourseId=?";
+            sql = "SELECT * FROM DB2024_EVALUATION WHERE CourseId=?";
         }
         
         try {
@@ -116,7 +94,6 @@ public class CourseEvaluationManagementStudent extends JFrame {
                 Object[] row = new Object[resultSet.getMetaData().getColumnCount()];
                 for (int i = 1; i <= resultSet.getMetaData().getColumnCount(); i++) {
                     row[i - 1] = resultSet.getObject(i);
-                    
                 }
                 model.addRow(row);
             }
@@ -131,42 +108,15 @@ public class CourseEvaluationManagementStudent extends JFrame {
             e.printStackTrace();
         }
 	}
+
 	
-	private void deleteEval(String selectedItem, String searchText, int id) {
-		String deleteQuery = "DELETE FROM DB2024_EVALUATION WHERE evaluationID = ?";
-		try(
-			Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
-			PreparedStatement pStmt = conn.prepareStatement(deleteQuery);
-			){	
-			try {
-				conn.setAutoCommit(false);
-				pStmt.setInt(1, id);
-				pStmt.executeUpdate();
-				conn.commit();
-				System.out.println(id + "deleted");
-			} catch(SQLException se) {
-				se.printStackTrace();
-				System.out.println("execute rollback");
-				try {
-					if(conn!=null) {
-						conn.rollback();
-					}
-				}catch (SQLException se2) {
-					se2.printStackTrace();
-				}
-			}
-		}catch (SQLException se) {
-			se.printStackTrace();
-		}
-	
-	}
 
 	
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					CourseEvaluationManagementStudent frame = new CourseEvaluationManagementStudent();
+					CourseEvaluationManagemet frame = new CourseEvaluationManagemet();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -178,7 +128,8 @@ public class CourseEvaluationManagementStudent extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public CourseEvaluationManagementStudent() {
+	public CourseEvaluationManagemet() {
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 800, 543);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -207,8 +158,7 @@ public class CourseEvaluationManagementStudent extends JFrame {
 				String searchText = searchTextField.getText();
 				System.out.println(selectedItem);
 				System.out.println(searchText);
-				searchEval(selectedItem, searchText);
-				
+				searchEval(selectedItem, searchText);				
 			}
 		});
 		btnSearch.setBounds(554, 97, 58, 29);
@@ -218,7 +168,7 @@ public class CourseEvaluationManagementStudent extends JFrame {
 		homeButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
-				start_frame = new StudentStart();
+				start_frame = new StartProfessor();
 			    start_frame.setVisible(true);
 			    setVisible(false);
 			}
@@ -233,66 +183,12 @@ public class CourseEvaluationManagementStudent extends JFrame {
 		comboBox.setSelectedItem("강의명"); // 기본 선택
 		comboBox.setBounds(101, 98, 101, 27);
 		panel.add(comboBox);
-
+	
         table = new JTable();
         table.setBounds(50, 150, 700, 300);
         JScrollPane scrollpane = new JScrollPane(table);
         scrollpane.setBounds(50, 150, 700, 300);
         panel.add(scrollpane);
-        
-        btnRegister = new JButton("등록");
-        btnRegister.addActionListener(new ActionListener() {
-        	public void actionPerformed(ActionEvent e) {
-        		//등록 버튼 눌렀을 때 
-        		add_frame = new CourseEvaluationAdd();
-        		add_frame.setVisible(true);
-        	}
-        });
-        btnRegister.setBounds(537, 457, 75, 29);
-        panel.add(btnRegister);
-        
-        btnModify = new JButton("수정");
-        btnModify.addActionListener(new ActionListener() {
-        	public void actionPerformed(ActionEvent e) {
-        		//수정 버튼 눌렀을 때 
-        		int row = table.getSelectedRow();
-        		int eval_id = Integer.parseInt(table.getModel().getValueAt(row, 0).toString());
-        		if (!checkValid(eval_id)) {
-					JOptionPane.showMessageDialog(null, "작성하지 않은 강의평을 선택했거나, 데이터베이스 접속에 실패했습니다.", "오류",JOptionPane.ERROR_MESSAGE);
-					
-					return;
-				}
-        		modify_frame = new CourseEvaluationModify(eval_id);
-        		modify_frame.setVisible(true);
-        		
-        		
-        	}
-        });
-        btnModify.setBounds(605, 457, 75, 29);
-        panel.add(btnModify);
-        
-        btnDelete = new JButton("삭제");
-        btnDelete.addActionListener(new ActionListener() {
-        	public void actionPerformed(ActionEvent e) {
-        		//삭제 버튼 눌렀을 때 
-        		int row = table.getSelectedRow();
-        		int eval_id = Integer.parseInt(table.getModel().getValueAt(row, 0).toString());
-				String selectedItem = (String) comboBox.getSelectedItem();
-				String searchText = searchTextField.getText();
-				System.out.println(selectedItem);
-				System.out.println(searchText);
-				if (!checkValid(eval_id)) {
-					JOptionPane.showMessageDialog(null, "작성하지 않은 강의평을 선택했거나, 데이터베이스 접속에 실패했습니다.", "오류",JOptionPane.ERROR_MESSAGE);
-				}
-				deleteEval(selectedItem, searchText, eval_id);        		
-        		
-        	}
-        });
-        btnDelete.setBounds(675, 457, 75, 29);
-        panel.add(btnDelete);
-        
-        JScrollPane scrollPane = new JScrollPane();
-        scrollPane.setBounds(50, 439, 581, -306);
-        panel.add(scrollPane);
 	}
+
 }

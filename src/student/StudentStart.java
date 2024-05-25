@@ -33,6 +33,7 @@ public class StudentStart extends JFrame {
 	public static GradeViewStudent grade_view_frame = null;
 	public static CourseEvaluationManagementStudent course_evaluation_management_frame = null;
 	public static Start start_frame = null;
+	public static TimetableStudent timetable_frame = null;
 	private JButton homeButton;
 	
 	
@@ -102,6 +103,15 @@ public class StudentStart extends JFrame {
 		panel.add(btn5);
 		
 		btn6 = new JButton("5. 시간표 조회");
+		btn6.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				timetable_frame = new TimetableStudent();
+				timetable_frame.setVisible(true);
+				setVisible(false);
+				
+			}
+		});
 		btn6.setBounds(215, 375, 344, 52);
 		panel.add(btn6);
 		

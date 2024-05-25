@@ -36,9 +36,6 @@ public class CourseEvaluationManagemet extends JFrame {
 	private JButton homeButton;
 	private JComboBox comboBox;
 	private JTable table;
-	private JButton btnRegister;
-    private JButton btnModify;
-    private JButton btnDelete;
 
 	public static WorkerStart start_frame=null;
 
@@ -192,41 +189,6 @@ public class CourseEvaluationManagemet extends JFrame {
         JScrollPane scrollpane = new JScrollPane(table);
         scrollpane.setBounds(50, 150, 700, 300);
         panel.add(scrollpane);
-        
-        btnRegister = new JButton("등록");
-        btnRegister.addActionListener(new ActionListener() {
-        	public void actionPerformed(ActionEvent e) {
-        		//등록 버튼 눌렀을 때 
-
-        	}
-        });
-        btnRegister.setBounds(537, 457, 75, 29);
-        panel.add(btnRegister);
-        
-        btnModify = new JButton("수정");
-        btnModify.addActionListener(new ActionListener() {
-        	public void actionPerformed(ActionEvent e) {
-        		//수정 버튼 눌렀을 때 
-        		int row = table.getSelectedRow();
-        		String id = table.getModel().getValueAt(row, 0).toString();
-        		System.out.println(id);
-        	}
-        });
-        btnModify.setBounds(605, 457, 75, 29);
-        panel.add(btnModify);
-        
-        btnDelete = new JButton("삭제");
-        btnDelete.addActionListener(new ActionListener() {
-        	public void actionPerformed(ActionEvent e) {
-        		//삭제 버튼 눌렀을 때 
-        		
-        		
-        		
-        		
-        	}
-        });
-        btnDelete.setBounds(675, 457, 75, 29);
-        panel.add(btnDelete);
 	}
 
 }
