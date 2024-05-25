@@ -34,8 +34,10 @@ public class ProfessorLogin extends JFrame {
 	public static final String professorID = "";
 
 	private static final String url = "jdbc:mysql://localhost:3306/DB2024Team04";
+
 	private static final String username = "root";
 	private static final String password = "root";
+
 
 	public ProfessorLogin() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
