@@ -1,3 +1,4 @@
+
 package worker;
 
 import java.awt.EventQueue;
@@ -15,12 +16,20 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
+
+import com.mysql.cj.jdbc.result.ResultSetMetaData;
+
 import javax.swing.JTable;
 import javax.swing.JComboBox;
 
+/*
+ 직원은 학생의 성적 조회만 가능 
+ (등록, 수정, 삭제 불가) 
+ */
 
 public class GradeManagement extends JFrame {
 
@@ -33,21 +42,14 @@ public class GradeManagement extends JFrame {
 	private JButton homeButton;
 	private JComboBox comboBox;
 	private JTable table;
-	private JButton btnRegister;
-    private JButton btnModify;
-    private JButton btnDelete;
 
-	public static WorkerStart start_frame=null;
-	public static GradeRegister grade_register_frame=null;
+	public static WorkerStart start_frame = null;
+	public static GradeRegister grade_register_frame = null;
 
-	
-    private static final String url = "jdbc:mysql://localhost:3306/DB2024";
-    private static final String username = "";
-    private static final String password = "";
-  
+	private static final String url = "jdbc:mysql://localhost:3306/DB2024Team04";
+	private static final String username = "";
+	private static final String password = "";
 
-
-    
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -61,8 +63,6 @@ public class GradeManagement extends JFrame {
 		});
 	}
 
-
-	
 	public GradeManagement() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 800, 543);
@@ -70,140 +70,107 @@ public class GradeManagement extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-		
+
 		panel = new JPanel();
 		panel.setBounds(12, 6, 771, 492);
 		contentPane.add(panel);
 		panel.setLayout(null);
-		
+
 		title = new JLabel("성적 관리");
 		title.setFont(new Font("Lucida Grande", Font.PLAIN, 27));
 		title.setBounds(317, 21, 124, 55);
 		panel.add(title);
-		
+
 		searchTextField = new JTextField("학번 or 강의id를 입력하세요");
 		searchTextField.setBounds(214, 97, 344, 26);
 		panel.add(searchTextField);
 		searchTextField.setColumns(10);
-		
+
 		btnSearch = new JButton("검색");
 		btnSearch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String selectedItem = (String) comboBox.getSelectedItem();
 				String searchText = searchTextField.getText();
-				System.out.println(selectedItem);
-				System.out.println(searchText);
-				searchGrade(selectedItem, searchText);	
-				
+				searchGrade(selectedItem, searchText);
+
 			}
 		});
 		btnSearch.setBounds(554, 97, 58, 29);
 		panel.add(btnSearch);
-		
+
 		homeButton = new JButton("home");
 		homeButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
 				start_frame = new WorkerStart();
-			    start_frame.setVisible(true);
-			    setVisible(false);
+				start_frame.setVisible(true);
+				setVisible(false);
 			}
 		});
 		homeButton.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
 		homeButton.setBounds(6, 6, 75, 29);
 		panel.add(homeButton);
-		
+
 		comboBox = new JComboBox<>();
-		String[] options = {"학번", "강의id"};
-		comboBox.setModel(new DefaultComboBoxModel<>(options)); 
-		comboBox.setSelectedItem("학번"); // 기본 선택
+		String[] options = { "학번", "강의id" };
+		comboBox.setModel(new DefaultComboBoxModel<>(options));
+		comboBox.setSelectedItem("학번"); 
 		comboBox.setBounds(101, 98, 101, 27);
 		panel.add(comboBox);
-	
-        table = new JTable();
+
+		table = new JTable();
+		table.setBounds(50, 150, 700, 300);
+		panel.add(table);
+
+        JScrollPane pane = new JScrollPane(table);
         table.setBounds(50, 150, 700, 300);
-        panel.add(table);
-        
-        btnRegister = new JButton("등록");
-        btnRegister.addActionListener(new ActionListener() {
-        	public void actionPerformed(ActionEvent e) {
-        		//등록 버튼 눌렀을 때 
-        		grade_register_frame = new GradeRegister();
-        		grade_register_frame.setVisible(true);
-			    setVisible(false);
-        	}
-        });
-        btnRegister.setBounds(537, 457, 75, 29);
-        panel.add(btnRegister);
-        
-        btnModify = new JButton("수정");
-        btnModify.addActionListener(new ActionListener() {
-        	public void actionPerformed(ActionEvent e) {
-        		//수정 버튼 눌렀을 때 
-        		
-        		
-        	}
-        });
-        btnModify.setBounds(605, 457, 75, 29);
-        panel.add(btnModify);
-        
-        btnDelete = new JButton("삭제");
-        btnDelete.addActionListener(new ActionListener() {
-        	public void actionPerformed(ActionEvent e) {
-        		//삭제 버튼 눌렀을 때 
-        		
-        		
-        		
-        		
-        	}
-        });
-        btnDelete.setBounds(675, 457, 75, 29);
-        panel.add(btnDelete);
+        panel.add(pane);
 		
 	}
-	
+
 	private void searchGrade(String selectedItem, String searchText) {
-        
 
-        String sql = "";
+		String sql = "";
 
-        if (selectedItem.equals("학번")) {
-            sql = "SELECT * FROM DB2024_GRADES WHERE StudentId=?";
-        } else if (selectedItem.equals("강의id")) {
-            sql = "SELECT * FROM DB2024_GRADES WHERE CourseId=?";
-        }
-        
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection connection = DriverManager.getConnection(url, username, password);
+		if (selectedItem.equals("학번")) {
+			sql = "SELECT * FROM DB2024_Grade WHERE StudentId=?";
+		} else if (selectedItem.equals("강의id")) {
+			sql = "SELECT * FROM DB2024_Grade WHERE CourseId=?";
+		}
 
-            PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setString(1, searchText); 
-            ResultSet resultSet = statement.executeQuery();
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			Connection connection = DriverManager.getConnection(url, username, password);
 
-            DefaultTableModel model = new DefaultTableModel();
-            table.setModel(model);
+			PreparedStatement statement = connection.prepareStatement(sql);
+			statement.setString(1, searchText);
+			ResultSet resultSet = statement.executeQuery();
 
+			DefaultTableModel model = new DefaultTableModel();
+			table.setModel(model);
 
-            for (int i = 1; i <= resultSet.getMetaData().getColumnCount(); i++) {
-                model.addColumn(resultSet.getMetaData().getColumnName(i));
-            }
+			for (int i = 1; i <= resultSet.getMetaData().getColumnCount(); i++) {
+				model.addColumn(resultSet.getMetaData().getColumnName(i));
+				System.out.println(resultSet.getMetaData().getColumnName(i));
+			}
 
-            while (resultSet.next()) {
-                Object[] row = new Object[resultSet.getMetaData().getColumnCount()];
-                for (int i = 1; i <= resultSet.getMetaData().getColumnCount(); i++) {
-                    row[i - 1] = resultSet.getObject(i);
-                }
-                model.addRow(row);
-            }
-   
-            resultSet.close();
-            statement.close();
-            connection.close();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+			while (resultSet.next()) {
+				Object[] row = new Object[resultSet.getMetaData().getColumnCount()];
+				for (int i = 1; i <= resultSet.getMetaData().getColumnCount(); i++) {
+					row[i - 1] = resultSet.getObject(i);
+				}
+				model.addRow(row);
+			}
+
+			resultSet.close();
+			statement.close();
+			connection.close();
+			
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 }
+

@@ -1,5 +1,4 @@
-
-package worker;
+package professor;
 
 import java.awt.Component;
 import java.awt.EventQueue;
@@ -38,7 +37,7 @@ public class CourseEvaluationManagemet extends JFrame {
 	private JComboBox comboBox;
 	private JTable table;
 
-	public static WorkerStart start_frame=null;
+	public static StartProfessor start_frame=null;
 
 
 	//JDBC driver name and database URL
@@ -169,7 +168,7 @@ public class CourseEvaluationManagemet extends JFrame {
 		homeButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
-				start_frame = new WorkerStart();
+				start_frame = new StartProfessor();
 			    start_frame.setVisible(true);
 			    setVisible(false);
 			}
@@ -193,4 +192,3 @@ public class CourseEvaluationManagemet extends JFrame {
 	}
 
 }
-
