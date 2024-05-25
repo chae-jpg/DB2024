@@ -1,4 +1,6 @@
-package worker;
+package worker.Evaluation;
+
+import worker.WorkerStart;
 
 import java.awt.EventQueue;
 import java.awt.Font;
@@ -21,8 +23,6 @@ public class CourseEvaluationManagement extends JFrame {
     private JComboBox<String> comboBox;
     private JTable table;
     private DefaultTableModel tableModel;
-    private JButton btnRegister;
-    private JButton btnModify;
     private JButton btnDelete;
     public static WorkerStart start_frame = null;
     private CourseEvaluationDAO courseEvaluationDAO;
@@ -104,32 +104,24 @@ public class CourseEvaluationManagement extends JFrame {
         scrollPane.setBounds(50, 150, 700, 300);
         panel.add(scrollPane);
 
-        btnRegister = new JButton("등록");
-        btnRegister.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                // 등록 버튼 눌렀을 때
-            }
-        });
-        btnRegister.setBounds(537, 457, 75, 29);
-        panel.add(btnRegister);
-
-        btnModify = new JButton("수정");
-        btnModify.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                // 수정 버튼 눌렀을 때
-            }
-        });
-        btnModify.setBounds(605, 457, 75, 29);
-        panel.add(btnModify);
-
         btnDelete = new JButton("삭제");
         btnDelete.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                // 삭제 버튼 눌렀을 때
+                int selectedRow = table.getSelectedRow();
+                if (selectedRow >= 0) {
+                    int evaluationID = (int) tableModel.getValueAt(selectedRow, 0);
+                    courseEvaluationDAO.deleteEvaluation(evaluationID);
+                    loadAllEvaluations(); // 모든 평가를 다시 로드
+                } else {
+                    JOptionPane.showMessageDialog(panel, "삭제할 평가를 선택하세요.", "삭제 오류", JOptionPane.ERROR_MESSAGE);
+                }
             }
         });
         btnDelete.setBounds(675, 457, 75, 29);
         panel.add(btnDelete);
+
+        // Load all evaluations on startup
+        loadAllEvaluations();
     }
 
     private void searchEvaluations(String criteria, String value) {
@@ -137,9 +129,19 @@ public class CourseEvaluationManagement extends JFrame {
         if (criteria.equals("강의명")) {
             evaluations = courseEvaluationDAO.getEvaluationsByCourseName(value);
         } else {
-            int courseID = Integer.parseInt(value);
-            evaluations = courseEvaluationDAO.getEvaluationsByCourseID(courseID);
+            try {
+                int courseID = Integer.parseInt(value);
+                evaluations = courseEvaluationDAO.getEvaluationsByCourseID(courseID);
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(panel, "유효한 학수번호를 입력하세요.", "입력 오류", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
         }
+        displayEvaluations(evaluations);
+    }
+
+    private void loadAllEvaluations() {
+        List<Evaluation> evaluations = courseEvaluationDAO.getAllEvaluations();
         displayEvaluations(evaluations);
     }
 

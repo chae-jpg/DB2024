@@ -1,4 +1,4 @@
-package worker;
+package worker.Evaluation;
 
 import main.DatabaseConnection;
 
@@ -56,5 +56,39 @@ public class CourseEvaluationDAO {
             e.printStackTrace();
         }
         return evaluations;
+    }
+
+    public List<Evaluation> getAllEvaluations() {
+        List<Evaluation> evaluations = new ArrayList<>();
+        Connection connection = DatabaseConnection.getConnection();
+        try {
+            String query = "SELECT * FROM DB2024_Evaluation";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                int evaluationID = resultSet.getInt("EvaluationID");
+                int score = resultSet.getInt("Score");
+                java.sql.Date date = resultSet.getDate("Date");
+                String comment = resultSet.getString("Comment");
+                int studentID = resultSet.getInt("StudentID");
+                int courseID = resultSet.getInt("CourseID");
+                evaluations.add(new Evaluation(evaluationID, score, date, comment, studentID, courseID));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return evaluations;
+    }
+
+    public void deleteEvaluation(int evaluationID) {
+        Connection connection = DatabaseConnection.getConnection();
+        try {
+            String query = "DELETE FROM DB2024_Evaluation WHERE EvaluationID = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setInt(1, evaluationID);
+            preparedStatement.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

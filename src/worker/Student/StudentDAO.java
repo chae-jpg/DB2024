@@ -1,4 +1,4 @@
-package worker;
+package worker.Student;
 
 import main.DatabaseConnection;
 
@@ -8,97 +8,97 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProfessorDAO {
+public class StudentDAO {
 
-    public List<Professor> getProfessorsByName(String name) {
-        List<Professor> professors = new ArrayList<>();
+    public List<Student> getStudentsByName(String name) {
+        List<Student> students = new ArrayList<>();
         Connection connection = DatabaseConnection.getConnection();
         try {
-            String query = "SELECT * FROM DB2024_Professor WHERE Name LIKE ?";
+            String query = "SELECT * FROM DB2024_Student WHERE Name LIKE ?";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.setString(1, "%" + name + "%");
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
-                professors.add(mapProfessor(resultSet));
+                students.add(mapStudent(resultSet));
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return professors;
+        return students;
     }
 
-    public List<Professor> getProfessorsById(int id) {
-        List<Professor> professors = new ArrayList<>();
+    public List<Student> getStudentsById(int id) {
+        List<Student> students = new ArrayList<>();
         Connection connection = DatabaseConnection.getConnection();
         try {
-            String query = "SELECT * FROM DB2024_Professor WHERE ProfessorID = ?";
+            String query = "SELECT * FROM DB2024_Student WHERE StudentID = ?";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.setInt(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
-                professors.add(mapProfessor(resultSet));
+                students.add(mapStudent(resultSet));
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return professors;
+        return students;
     }
 
-    public List<Professor> getProfessorsByDepartment(String department) {
-        List<Professor> professors = new ArrayList<>();
+    public List<Student> getStudentsByDepartment(String department) {
+        List<Student> students = new ArrayList<>();
         Connection connection = DatabaseConnection.getConnection();
         try {
-            String query = "SELECT * FROM DB2024_Professor WHERE Department LIKE ?";
+            String query = "SELECT * FROM DB2024_Student WHERE Department LIKE ?";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.setString(1, "%" + department + "%");
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
-                professors.add(mapProfessor(resultSet));
+                students.add(mapStudent(resultSet));
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return professors;
+        return students;
     }
 
-    public void addProfessor(Professor professor) {
+    public void addStudent(Student student) {
         Connection connection = DatabaseConnection.getConnection();
         try {
-            String query = "INSERT INTO DB2024_Professor (ProfessorID, Name, Department, Email, Phone, Password) VALUES (?, ?, ?, ?, ?, ?)";
+            String query = "INSERT INTO DB2024_Student (StudentID, Name, Department, Email, Contact, Password) VALUES (?, ?, ?, ?, ?, ?)";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setInt(1, professor.getProfessorID());
-            preparedStatement.setString(2, professor.getName());
-            preparedStatement.setString(3, professor.getDepartment());
-            preparedStatement.setString(4, professor.getEmail());
-            preparedStatement.setString(5, professor.getPhone());
-            preparedStatement.setString(6, professor.getPassword());
+            preparedStatement.setInt(1, student.getStudentID());
+            preparedStatement.setString(2, student.getName());
+            preparedStatement.setString(3, student.getDepartment());
+            preparedStatement.setString(4, student.getEmail());
+            preparedStatement.setString(5, student.getContact());
+            preparedStatement.setString(6, student.getPassword());
             preparedStatement.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public void updateProfessor(Professor professor) {
+    public void updateStudent(Student student) {
         Connection connection = DatabaseConnection.getConnection();
         try {
-            String query = "UPDATE DB2024_Professor SET Name = ?, Department = ?, Email = ?, Phone = ?, Password = ? WHERE ProfessorID = ?";
+            String query = "UPDATE DB2024_Student SET Name = ?, Department = ?, Email = ?, Contact = ?, Password = ? WHERE StudentID = ?";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setString(1, professor.getName());
-            preparedStatement.setString(2, professor.getDepartment());
-            preparedStatement.setString(3, professor.getEmail());
-            preparedStatement.setString(4, professor.getPhone());
-            preparedStatement.setString(5, professor.getPassword());
-            preparedStatement.setInt(6, professor.getProfessorID());
+            preparedStatement.setString(1, student.getName());
+            preparedStatement.setString(2, student.getDepartment());
+            preparedStatement.setString(3, student.getEmail());
+            preparedStatement.setString(4, student.getContact());
+            preparedStatement.setString(5, student.getPassword());
+            preparedStatement.setInt(6, student.getStudentID());
             preparedStatement.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public void deleteProfessor(int id) {
+    public void deleteStudent(int id) {
         Connection connection = DatabaseConnection.getConnection();
         try {
-            String query = "DELETE FROM DB2024_Professor WHERE ProfessorID = ?";
+            String query = "DELETE FROM DB2024_Student WHERE StudentID = ?";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.setInt(1, id);
             preparedStatement.executeUpdate();
@@ -107,13 +107,13 @@ public class ProfessorDAO {
         }
     }
 
-    private Professor mapProfessor(ResultSet resultSet) throws Exception {
-        int professorID = resultSet.getInt("ProfessorID");
+    private Student mapStudent(ResultSet resultSet) throws Exception {
+        int studentID = resultSet.getInt("StudentID");
         String name = resultSet.getString("Name");
         String department = resultSet.getString("Department");
         String email = resultSet.getString("Email");
-        String phone = resultSet.getString("Phone");
+        String contact = resultSet.getString("Contact");
         String password = resultSet.getString("Password");
-        return new Professor(professorID, name, department, email, phone, password);
+        return new Student(studentID, name, department, email, contact, password);
     }
 }

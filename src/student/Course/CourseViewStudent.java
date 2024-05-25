@@ -1,23 +1,20 @@
-package worker;
+package student.Course;
 
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.JTextField;
-import javax.swing.border.EmptyBorder;
-import javax.swing.table.DefaultTableModel;
 import java.util.List;
 
-public class CourseView extends JFrame {
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableModel;
+
+import student.StudentStart;
+import worker.Course.Course;
+import worker.Course.CourseDAO;
+
+public class CourseViewStudent extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
@@ -29,17 +26,14 @@ public class CourseView extends JFrame {
 	private JComboBox<String> comboBox;
 	private JTable table;
 	private DefaultTableModel tableModel;
-	private JButton btnRegister;
-	private JButton btnModify;
-	private JButton btnDelete;
-	public static WorkerStart start_frame = null;
+	public static StudentStart start_frame = null;
 	private CourseDAO courseDAO;
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					CourseView frame = new CourseView();
+					CourseViewStudent frame = new CourseViewStudent();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -48,11 +42,15 @@ public class CourseView extends JFrame {
 		});
 	}
 
-	public CourseView() {
+	public CourseViewStudent() {
 		courseDAO = new CourseDAO();
+		initialize();
+		loadAllCourses(); // Load all courses when the frame is initialized
+	}
 
+	private void initialize() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 800, 600);
+		setBounds(100, 100, 800, 543);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -65,7 +63,7 @@ public class CourseView extends JFrame {
 
 		title = new JLabel("강의 조회");
 		title.setFont(new Font("Lucida Grande", Font.PLAIN, 27));
-		title.setBounds(318, 24, 121, 55);
+		title.setBounds(332, 24, 118, 55);
 		panel.add(title);
 
 		searchTextField = new JTextField("강의명 or 학수번호 or 교수명을 입력하세요");
@@ -87,13 +85,13 @@ public class CourseView extends JFrame {
 		homeButton = new JButton("home");
 		homeButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				start_frame = new WorkerStart();
+				start_frame = new StudentStart();
 				start_frame.setVisible(true);
 				setVisible(false);
 			}
 		});
 		homeButton.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
-		homeButton.setBounds(6, 6, 75, 29);
+		homeButton.setBounds(6, 6, 81, 29);
 		panel.add(homeButton);
 
 		comboBox = new JComboBox<>();
@@ -103,41 +101,17 @@ public class CourseView extends JFrame {
 		comboBox.setBounds(101, 98, 101, 27);
 		panel.add(comboBox);
 
-		tableModel = new DefaultTableModel(
-				new Object[][] {},
-				new String[] { "CourseID", "CourseName", "Classroom", "Credit", "Semester", "Day", "Time", "ProfessorID" }
-		);
+		tableModel = new DefaultTableModel(new Object[][] {},
+				new String[] { "CourseID", "CourseName", "Classroom", "Credit", "Semester", "Day", "Time", "ProfessorID" });
 		table = new JTable(tableModel);
 		JScrollPane scrollPane = new JScrollPane(table);
 		scrollPane.setBounds(50, 150, 700, 300);
 		panel.add(scrollPane);
+	}
 
-		btnRegister = new JButton("등록");
-		btnRegister.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				// 등록 버튼 눌렀을 때
-			}
-		});
-		btnRegister.setBounds(537, 457, 75, 29);
-		panel.add(btnRegister);
-
-		btnModify = new JButton("수정");
-		btnModify.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				// 수정 버튼 눌렀을 때
-			}
-		});
-		btnModify.setBounds(605, 457, 75, 29);
-		panel.add(btnModify);
-
-		btnDelete = new JButton("삭제");
-		btnDelete.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				// 삭제 버튼 눌렀을 때
-			}
-		});
-		btnDelete.setBounds(675, 457, 75, 29);
-		panel.add(btnDelete);
+	private void loadAllCourses() {
+		List<Course> courses = courseDAO.getAllCourses();
+		displayCourses(courses);
 	}
 
 	private void searchCourses(String criteria, String value) {
@@ -145,8 +119,7 @@ public class CourseView extends JFrame {
 		if (criteria.equals("강의명")) {
 			courses = courseDAO.getCoursesByName(value);
 		} else if (criteria.equals("학수번호")) {
-			int courseID = Integer.parseInt(value);
-			courses = courseDAO.getCoursesByID(courseID);
+			courses = courseDAO.getCoursesByID(Integer.parseInt(value));
 		} else {
 			courses = courseDAO.getCoursesByProfessor(value);
 		}
@@ -162,4 +135,5 @@ public class CourseView extends JFrame {
 			});
 		}
 	}
+
 }

@@ -1,4 +1,4 @@
-package worker;
+package worker.Student;
 
 public class Student {
     private int studentID;

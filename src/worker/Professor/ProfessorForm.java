@@ -1,4 +1,4 @@
-package worker;
+package worker.Professor;
 
 import javax.swing.*;
 import java.awt.*;

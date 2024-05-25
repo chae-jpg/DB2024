@@ -1,4 +1,4 @@
-package worker;
+package worker.Course;
 
 public class Course {
     private int courseID;

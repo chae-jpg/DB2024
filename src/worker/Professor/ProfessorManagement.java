@@ -1,4 +1,6 @@
-package worker;
+package worker.Professor;
+
+import worker.WorkerStart;
 
 import java.awt.EventQueue;
 import java.awt.Font;
@@ -144,6 +146,8 @@ public class ProfessorManagement extends JFrame {
 		});
 		btnDelete.setBounds(675, 457, 75, 29);
 		panel.add(btnDelete);
+
+		displayProfessors(professorDAO.getProfessorsByName(""));
 	}
 
 	private void searchProfessors(String criteria, String value) {

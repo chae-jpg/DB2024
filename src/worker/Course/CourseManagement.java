@@ -1,4 +1,6 @@
-package worker;
+package worker.Course;
+
+import worker.WorkerStart;
 
 import java.awt.EventQueue;
 import java.awt.Font;
