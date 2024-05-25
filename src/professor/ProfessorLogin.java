@@ -1,28 +1,13 @@
-
 package professor;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JPasswordField;
-import javax.swing.border.EmptyBorder;
-
+import main.DatabaseConnection;
 import main.Start;
 
-import java.awt.Color;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-
-import java.awt.Font;
-import javax.swing.JButton;
-import javax.swing.JTextField;
-
-import java.awt.event.ActionListener;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.*;
 
 public class ProfessorLogin extends JFrame {
 	private static final long serialVersionUID = 1L;
@@ -34,10 +19,7 @@ public class ProfessorLogin extends JFrame {
 
 	public static final String professorID = "";
 
-	private static final String url = "jdbc:mysql://localhost:3306/DB2024Team04";
 
-	private static final String username = "root";
-	private static final String password = "root";
 
 
 	public ProfessorLogin() {
@@ -114,13 +96,12 @@ public class ProfessorLogin extends JFrame {
 		getContentPane().add(homeButton);
 
 	}
-
 	private boolean Login(String id, String pw) {
 		try {
-			
+
 			String sql = "SELECT count(*) FROM DB2024_Professor WHERE ProfessorID = ? AND Password = ?"; // id랑 password 맞는 행의 갯수를 구하는 쿼리를 구현해주었다.
 			Class.forName("com.mysql.cj.jdbc.Driver");
-			Connection connection = DriverManager.getConnection(url, username, password);
+			Connection connection = DatabaseConnection.getConnection(); // 변경된 부분
 			PreparedStatement statement = connection.prepareStatement(sql);
 			statement.setString(1, id);
 			statement.setString(2, pw);

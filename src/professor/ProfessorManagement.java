@@ -1,27 +1,14 @@
 package professor;
 
-import java.awt.EventQueue;
-import java.awt.Font;
+import professor.StartProfessor;
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JTable;
-import javax.swing.JTextField;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-
-import java.awt.event.ActionListener;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.Vector;
-import java.awt.event.ActionEvent;
-import javax.swing.JLabel;
+import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.List;
 
 public class ProfessorManagement extends JFrame {
 
@@ -32,12 +19,9 @@ public class ProfessorManagement extends JFrame {
 	private JButton btnSearch;
 	private JTextField searchTextField;
 	private JButton homeButton;
-	private JComboBox comboBox;
+	private JComboBox<String> comboBox;
 	private JTable table;
-	private JButton btnRegister;
-	private JButton btnModify;
-	private JButton btnDelete;
-	String sql_query="";
+	private ProfessorDAO professorDAO;
 
 	public static StartProfessor start_professor_frame = null;
 
@@ -55,6 +39,8 @@ public class ProfessorManagement extends JFrame {
 	}
 
 	public ProfessorManagement() {
+		professorDAO = new ProfessorDAO();
+
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 800, 543);
 		contentPane = new JPanel();
@@ -78,92 +64,26 @@ public class ProfessorManagement extends JFrame {
 		searchTextField.setColumns(10);
 
 		btnSearch = new JButton("검색");
-Vector<String> header = new Vector<String>();
-        
-        header.add("교수ID");
-        header.add("이름");
-        header.add("소속학과");
-        header.add("이메일");
-        header.add("전화번호");
-
-		DefaultTableModel model =new DefaultTableModel(header,0);
-		
 		btnSearch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				model.setNumRows(0);// 이전 검색결과 삭제용
-				switch (comboBox.getSelectedIndex()){
-				 case 0:
-				      sql_query = String.format("select *  from DB2024_Professor where Name='%s';",searchTextField.getText());
-				      
-
-				 break;
-				 
-				 case 1:
-				      sql_query = String.format("select * from DB2024_Professor where ProfessorID =%d;",Integer.valueOf(searchTextField.getText()));
-
-				 break;
-				 
-				 case 2:
-				      sql_query = String.format("select * from DB2024_Professor where Department='%s';",searchTextField.getText());
-
-				 break;
-				 
-				 
-				 }//switch
-			
-				
-				 
-				 try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/DB2024Team04", "root", "root");
-								 Statement stmt = conn.createStatement(); )
-								 {
-								 
-								
-								 //검색 쿼리
-
-								 
-							
-								 ResultSet rset = stmt.executeQuery(sql_query);
-								
-								 while( rset.next()) {
-									 
-									 String id =Integer.toString(rset.getInt("ProfessorID"));
-									 String name  =rset.getString("Name");
-									 String department =rset.getString("Department");									 
-									 String email  =rset.getString("Email");
-									 String phone =rset.getString("Phone");
-									 
-									 
-									 
-									 String[] data= {id,name,department,email,phone};
-									 model.addRow(data);
-									 
-									 
-									
-								 }	//while
-								
-											 
-								 }//try
-								 
-								 catch (SQLException sqle) {
-								 System.out.println("SQLException : " + sqle);
-								 }//catch
-
+				String selectedItem = (String) comboBox.getSelectedItem();
+				String searchText = searchTextField.getText();
+				searchProfessors(selectedItem, searchText);
 			}
 		});
-		btnSearch.setBounds(554, 97, 58, 29);
+		btnSearch.setBounds(574, 97, 75, 29);
 		panel.add(btnSearch);
 
 		homeButton = new JButton("home");
 		homeButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-
 				start_professor_frame = new StartProfessor();
 				start_professor_frame.setVisible(true);
 				setVisible(false);
 			}
 		});
 		homeButton.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
-		homeButton.setBounds(6, 6, 63, 29);
+		homeButton.setBounds(6, 6, 85, 29);
 		panel.add(homeButton);
 
 		comboBox = new JComboBox<>();
@@ -173,10 +93,32 @@ Vector<String> header = new Vector<String>();
 		comboBox.setBounds(101, 98, 101, 27);
 		panel.add(comboBox);
 
-		table = new JTable(model);
+		table = new JTable();
 		table.setBounds(50, 150, 700, 300);
 		panel.add(table);
 
+		JScrollPane pane = new JScrollPane(table);
+		pane.setBounds(50, 150, 700, 300);
+		panel.add(pane);
 	}
 
+	private void searchProfessors(String searchType, String searchText) {
+		List<Professor> professors = professorDAO.searchProfessors(searchType, searchText);
+		displayProfessors(professors);
+	}
+
+	private void displayProfessors(List<Professor> professors) {
+		DefaultTableModel model = new DefaultTableModel();
+		table.setModel(model);
+
+		model.addColumn("ProfessorID");
+		model.addColumn("Name");
+		model.addColumn("Department");
+		model.addColumn("Email");
+		model.addColumn("Phone");
+
+		for (Professor professor : professors) {
+			model.addRow(new Object[]{professor.getId(), professor.getName(), professor.getDepartment(), professor.getEmail(), professor.getPhone()});
+		}
+	}
 }

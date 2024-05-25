@@ -1,31 +1,19 @@
-
 package professor;
-
+import main.DatabaseConnection;
+import professor.ProfessorGradeDelete;
+import professor.ProfessorGradeEdit;
+import professor.ProfessorGradeRegister;
+import professor.StartProfessor;
 /* 교수님은 자기가 담당하는 과목 성적의 입력, 수정, 삭제 가능하다. 
  * 단, 조회는 다 가능하게 구현해주었다.  */
 
-import java.awt.EventQueue;
-import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextField;
+import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
-
-import javax.swing.JTable;
-import javax.swing.JComboBox;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.*;
 
 public class ProfessorGradeManagement extends JFrame {
 
@@ -46,10 +34,6 @@ public class ProfessorGradeManagement extends JFrame {
 	public static ProfessorGradeRegister grade_register_frame = null;
 	public static ProfessorGradeEdit grade_edit_frame = null;
 	public static ProfessorGradeDelete grade_delete_frame = null;
-
-	private static final String url = "jdbc:mysql://localhost:3306/DB2024team04";
-	private static final String username = "";
-	private static final String password = "";
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -173,22 +157,22 @@ public class ProfessorGradeManagement extends JFrame {
 
 		if (selectedItem.equalsIgnoreCase("학번")) {
 			sql = "SELECT g.CourseID, c.CourseName, g.StudentID, s.Name, g.Grade, g.Semester, g.Repetition " // 학생명과
-																												// 강의명도
-																												// 나오게
-																												// 수정했습니다.
+					// 강의명도
+					// 나오게
+					// 수정했습니다.
 					+ "FROM DB2024_Grade g, DB2024_Student s, DB2024_Course c "
 					+ "WHERE g.StudentID = s.StudentID AND g.CourseID = c.CourseID AND g.StudentID = ?";
 		} else if (selectedItem.equalsIgnoreCase("강의id")) {
 			sql = "SELECT g.CourseID, c.CourseName, g.StudentID, s.Name, g.Grade, g.Semester, g.Repetition "// 학생명과 강의명도
-																											// 나오게
-																											// 수정했습니다.
+					// 나오게
+					// 수정했습니다.
 					+ "FROM DB2024_Grade g, DB2024_Student s, DB2024_Course c "
 					+ "WHERE g.StudentID = s.StudentID AND g.CourseID = c.CourseID AND g.CourseID = ?";
 		}
 
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
-			Connection connection = DriverManager.getConnection(url, username, password);
+			Connection connection = DatabaseConnection.getConnection(); // 변경된 부분
 
 			PreparedStatement statement = connection.prepareStatement(sql);
 			statement.setString(1, searchText);
@@ -219,4 +203,3 @@ public class ProfessorGradeManagement extends JFrame {
 		}
 	}
 }
-

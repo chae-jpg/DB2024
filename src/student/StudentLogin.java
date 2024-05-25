@@ -1,29 +1,13 @@
-
 package student;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JPasswordField;
-
-import java.awt.Color;
-
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-
-import java.awt.Font;
-import javax.swing.JButton;
-import javax.swing.JTextField;
-import javax.swing.border.EmptyBorder;
-
+import main.DatabaseConnection;
 import main.Start;
 
-import java.awt.event.ActionListener;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.*;
 
 
 public class StudentLogin extends JFrame{
@@ -38,11 +22,7 @@ public class StudentLogin extends JFrame{
 	private JLabel rejectLabel;
 	public static final String studentID="";
 	
-	
-	private static final String url = "jdbc:mysql://localhost:3306/DB2024Team04";
 
-	private static final String username = "root";
-	private static final String password = "root";
 
 	
 	public StudentLogin() {
@@ -129,7 +109,7 @@ public class StudentLogin extends JFrame{
 		try {
 			String sql = "SELECT count(*) FROM DB2024_Student WHERE StudentID = ? AND Password = ?";// sql문 만들어서 존재여부 확인한다. 
 			Class.forName("com.mysql.cj.jdbc.Driver");
-			Connection connection = DriverManager.getConnection(url, username, password);
+			Connection connection = DatabaseConnection.getConnection();
 			PreparedStatement statement = connection.prepareStatement(sql);
 			statement.setString(1, id);
 			statement.setString(2, pw);

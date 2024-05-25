@@ -1,34 +1,17 @@
 package student;
+import main.DatabaseConnection;
+import main.DatabaseConnection;
 
-import javax.swing.JFrame;
-import javax.swing.JButton;
-
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.Label;
-
-import javax.swing.JLabel;
-import javax.swing.JTextArea;
-
-import java.awt.Panel;
-import java.sql.*;
-import java.awt.BorderLayout;
-import java.awt.GridLayout;
-import java.awt.FlowLayout;
-import java.awt.Canvas;
-import java.awt.event.ActionListener;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.*;
 
 
 
 public class TimetableStudent extends JFrame{
 	//JDBC driver name and database URL
-		static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";  
-		static final String DB_URL = "jdbc:mysql://localhost/DB2024team04";
-		//Database credentials
-		// MySQL 계정과 암호 입력
-		static final String USER = "root";
-		static final String PASS = "root";
 		public static StudentStart start_frame = null;
 	private Panel mon12;
 	private Panel fri56;
@@ -282,7 +265,7 @@ public class TimetableStudent extends JFrame{
 		String sql = "SELECT courseid from DB2024_REGISTER WHERE studentid = ?";
 		String sqlname = "SELECT name from DB2024_STUDENT WHERE studentid = ?";
 		try {
-			Connection conn = DriverManager.getConnection(DB_URL,USER, PASS);
+			Connection conn = DatabaseConnection.getConnection();
 			PreparedStatement pStmt = conn.prepareStatement(sql);
 			PreparedStatement pStmtname = conn.prepareStatement(sqlname);
 			pStmt.setInt(1, Integer.parseInt(Student.getInstance().getStudentId()));
@@ -361,7 +344,7 @@ public class TimetableStudent extends JFrame{
 				String pname = "";
 				int pid = crs.getInt(8);
 				String psql = "Select name from db2024_professor where professorid = ?";
-				Connection conn = DriverManager.getConnection(DB_URL,USER, PASS);
+				Connection conn = DatabaseConnection.getConnection();
 				PreparedStatement ppStmt = conn.prepareStatement(psql);
 				ppStmt.setInt(1, pid);
 				ResultSet pset = ppStmt.executeQuery();

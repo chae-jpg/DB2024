@@ -1,29 +1,15 @@
-
 package professor;
-
+import main.DatabaseConnection;
 /*
  * 교수는 자신이 수업하는 강의에 한해서 등록 가능하다. 
  * 트랜잭션을 통해 원자성, 일관성, 고립성, 지속성을 유지하게 해준다. */
 
-import java.awt.EventQueue;
-import java.awt.Font;
-
-import javax.swing.ButtonGroup;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
+import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import javax.swing.JRadioButton;
-import javax.swing.JTextField;
-import javax.swing.JButton;
-import java.awt.event.ActionListener;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.*;
 
 public class ProfessorGradeRegister extends JFrame {
 
@@ -55,10 +41,6 @@ public class ProfessorGradeRegister extends JFrame {
 
 	public static ProfessorGradeManagement grade_management_frame = null;
 	public static StartProfessor start_professor_frame = null;
-
-	private static final String url = "jdbc:mysql://localhost:3306/DB2024Team04";
-	private static final String username = "";
-	private static final String password = "";
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -251,181 +233,178 @@ public class ProfessorGradeRegister extends JFrame {
 	}
 
 	private void registerGrade(String selectedrb, String semester, String searchedCourse, String searchedStudent) {
-		
-	    String id = Professor.getInstance().getId();
-	    String sql = "";
-	    int CourseID = 0;
-	    Connection connection = null;
 
-	    try {
-	    	
-	        Class.forName("com.mysql.cj.jdbc.Driver");
-	        connection = DriverManager.getConnection(url, username, password);
-	        connection.setAutoCommit(false); // 트랜잭션을 위해 AutoCommit false로 설정했따. 
+		String id = Professor.getInstance().getId();
+		String sql = "";
+		int CourseID = 0;
+		Connection connection = null;
 
-	        int CourseID_temp = Integer.parseInt(searchedCourse); // integer형으로 바뀐다면, 즉 강의명이 아닌 강의id라면
-	        
-	        try {
-	            sql = "SELECT CourseID FROM DB2024_Course WHERE ProfessorID= ?"; // sql문 만들어서 courseid 찾아오기
+		try {
 
-	            PreparedStatement statement = connection.prepareStatement(sql);
-	            statement.setString(1, id); //id 설정 
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			connection = DatabaseConnection.getConnection(); // 변경된 부분
+			connection.setAutoCommit(false); // 트랜잭션을 위해 AutoCommit false로 설정했따.
 
-	            ResultSet resultSet = statement.executeQuery();
+			int CourseID_temp = Integer.parseInt(searchedCourse); // integer형으로 바뀐다면, 즉 강의명이 아닌 강의id라면
 
-	            if (resultSet.next()) {
-	                if (CourseID_temp == resultSet.getInt("CourseID")) {
-	                    CourseID = resultSet.getInt("CourseID");
-	                } else {
-	                    JOptionPane.showMessageDialog(this, "선택한 강의는 본인의 강의가 아닙니다.");
-	                    connection.rollback(); // 롤백해서 트랜잭션 취소해준다. 
-	                    return;
-	                }
-	            } else {
-	                JOptionPane.showMessageDialog(this, "선택한 강의는 본인의 강의가 아닙니다.");
-	                connection.rollback(); // 롤백해서 트랜잭션 취소해준다. 
-	                return;
-	            }
-	            resultSet.close();
-	            statement.close();
-	            
-	        } catch (SQLException e) {
-	            connection.rollback(); // 롤백해서 트랜잭션 취소해준다. 
-	            e.printStackTrace();
-	            return;
-	        }
-	    } catch (NumberFormatException e) { //Integer형으로 바뀌지 않는다는건 강의명을 입력으로 받아왔다는 뜻임 
-	        try {
-	            sql = "SELECT CourseID FROM DB2024_Course WHERE CourseName=? AND ProfessorID= ?"; // sql문 만들어서 courseid 찾아오기
+			try {
+				sql = "SELECT CourseID FROM DB2024_Course WHERE ProfessorID= ?"; // sql문 만들어서 courseid 찾아오기
 
-	            PreparedStatement statement = connection.prepareStatement(sql);
-	            statement.setString(1, searchedCourse);
-	            statement.setString(2, id);
+				PreparedStatement statement = connection.prepareStatement(sql);
+				statement.setString(1, id); //id 설정
 
-	            ResultSet resultSet = statement.executeQuery();
+				ResultSet resultSet = statement.executeQuery();
 
-	            if (resultSet.next()) {
-	                CourseID = resultSet.getInt("CourseID");
-	                System.out.println("CourseID: " + CourseID);
-	            } else {
-	                System.out.println("결과가 없습니다.");
-	                connection.rollback();  // 롤백해서 트랜잭션 취소해준다. 
-	                return;
-	            }
-	            resultSet.close();
-	            statement.close();
-	            
-	        } catch (SQLException ec1) {
-	            try {
+				if (resultSet.next()) {
+					if (CourseID_temp == resultSet.getInt("CourseID")) {
+						CourseID = resultSet.getInt("CourseID");
+					} else {
+						JOptionPane.showMessageDialog(this, "선택한 강의는 본인의 강의가 아닙니다.");
+						connection.rollback(); // 롤백해서 트랜잭션 취소해준다.
+						return;
+					}
+				} else {
+					JOptionPane.showMessageDialog(this, "선택한 강의는 본인의 강의가 아닙니다.");
+					connection.rollback(); // 롤백해서 트랜잭션 취소해준다.
+					return;
+				}
+				resultSet.close();
+				statement.close();
+
+			} catch (SQLException e) {
+				connection.rollback(); // 롤백해서 트랜잭션 취소해준다.
+				e.printStackTrace();
+				return;
+			}
+		} catch (NumberFormatException e) { //Integer형으로 바뀌지 않는다는건 강의명을 입력으로 받아왔다는 뜻임
+			try {
+				sql = "SELECT CourseID FROM DB2024_Course WHERE CourseName=? AND ProfessorID= ?"; // sql문 만들어서 courseid 찾아오기
+
+				PreparedStatement statement = connection.prepareStatement(sql);
+				statement.setString(1, searchedCourse);
+				statement.setString(2, id);
+
+				ResultSet resultSet = statement.executeQuery();
+
+				if (resultSet.next()) {
+					CourseID = resultSet.getInt("CourseID");
+					System.out.println("CourseID: " + CourseID);
+				} else {
+					System.out.println("결과가 없습니다.");
+					connection.rollback();  // 롤백해서 트랜잭션 취소해준다.
+					return;
+				}
+				resultSet.close();
+				statement.close();
+
+			} catch (SQLException ec1) {
+				try {
 					connection.rollback(); // 롤백해서 트랜잭션 취소해준다.
 				} catch (SQLException e1) {
 					System.out.println(e1.getMessage());
-				} 
-	            System.out.println(ec1.getMessage());
-	            return;
-	        }
-	    } catch (ClassNotFoundException e1) {
+				}
+				System.out.println(ec1.getMessage());
+				return;
+			}
+		} catch (ClassNotFoundException e1) {
 			e1.printStackTrace();
 		} catch (SQLException e1) {
 			e1.printStackTrace();
 		}
 
-	    int StudentID = 0;
+		int StudentID = 0;
 
-	    try {
-	        StudentID = Integer.parseInt(searchedStudent); // integer형으로 바뀐다면, 즉 학생 이름이 아닌 학생id라면
-	    } catch (NumberFormatException e) { // 학생이름으로 입력 받아왔다면
-	        try {
-	            sql = "SELECT StudentID FROM DB2024_Student WHERE Name=?"; // sql문 만들어서 학생id 찾아오기
+		try {
+			StudentID = Integer.parseInt(searchedStudent); // integer형으로 바뀐다면, 즉 학생 이름이 아닌 학생id라면
+		} catch (NumberFormatException e) { // 학생이름으로 입력 받아왔다면
+			try {
+				sql = "SELECT StudentID FROM DB2024_Student WHERE Name=?"; // sql문 만들어서 학생id 찾아오기
 
-	            PreparedStatement statement = connection.prepareStatement(sql);
-	            statement.setString(1, searchedStudent);
-	            ResultSet resultSet = statement.executeQuery();
+				PreparedStatement statement = connection.prepareStatement(sql);
+				statement.setString(1, searchedStudent);
+				ResultSet resultSet = statement.executeQuery();
 
-	            if (resultSet.next()) {
-	                StudentID = resultSet.getInt("StudentID");
-	                System.out.println("StudentID: " + StudentID);
-	            } else {
-	                System.out.println("결과가 없습니다.");
-	                connection.rollback();  // 롤백해서 트랜잭션 취소해준다.
-	                return;
-	            }
-	            resultSet.close();
-	            statement.close();
-	        } catch (SQLException ec2) {
-	            try {
+				if (resultSet.next()) {
+					StudentID = resultSet.getInt("StudentID");
+					System.out.println("StudentID: " + StudentID);
+				} else {
+					System.out.println("결과가 없습니다.");
+					connection.rollback();  // 롤백해서 트랜잭션 취소해준다.
+					return;
+				}
+				resultSet.close();
+				statement.close();
+			} catch (SQLException ec2) {
+				try {
 					connection.rollback();
 				} catch (SQLException e1) {
 					e1.printStackTrace();
-				}  // 롤백해서 트랜잭션 취소 
-	            ec2.printStackTrace();
-	            return;
-	        }
-	    }
+				}  // 롤백해서 트랜잭션 취소
+				ec2.printStackTrace();
+				return;
+			}
+		}
 
-	    // 재수강 여부 확인 및 성적 등록
-	    try {
-	        sql = "INSERT INTO DB2024_Grade(StudentId, CourseId, Grade, Semester) VALUES (?, ?, ?, ?)";
+		// 재수강 여부 확인 및 성적 등록
+		try {
+			sql = "INSERT INTO DB2024_Grade(StudentId, CourseId, Grade, Semester) VALUES (?, ?, ?, ?)";
 
-	        // 재수강여부 확인 (등록을 실행하기 전 먼저 studentid, courseid로 이미 데이터가 존재하는지 확인 후 넣기)
-	        String sql_re = "SELECT count(*) FROM DB2024_Grade WHERE StudentId=? AND CourseId=?";
+			// 재수강여부 확인 (등록을 실행하기 전 먼저 studentid, courseid로 이미 데이터가 존재하는지 확인 후 넣기)
+			String sql_re = "SELECT count(*) FROM DB2024_Grade WHERE StudentId=? AND CourseId=?";
 
-	        PreparedStatement statement_re = connection.prepareStatement(sql_re);
-	        statement_re.setInt(1, StudentID);
-	        statement_re.setInt(2, CourseID);
+			PreparedStatement statement_re = connection.prepareStatement(sql_re);
+			statement_re.setInt(1, StudentID);
+			statement_re.setInt(2, CourseID);
 
-	        ResultSet resultSet_re = statement_re.executeQuery();
+			ResultSet resultSet_re = statement_re.executeQuery();
 
-	        if (resultSet_re.next()) {
-	            int count = resultSet_re.getInt(1);
-	            if (count > 0) {
-	                // 재수강이면 이전 GRADE를 P로 바꾸기
-	                String sql_grade_update = "UPDATE DB2024_Grade SET Grade = 'P' WHERE StudentId = ? AND CourseId = ?";
-	                PreparedStatement updateStatement1 = connection.prepareStatement(sql_grade_update);
-	                updateStatement1.setInt(1, StudentID);
-	                updateStatement1.setInt(2, CourseID);
-	                updateStatement1.executeUpdate();
-	                updateStatement1.close();
+			if (resultSet_re.next()) {
+				int count = resultSet_re.getInt(1);
+				if (count > 0) {
+					// 재수강이면 이전 GRADE를 P로 바꾸기
+					String sql_grade_update = "UPDATE DB2024_Grade SET Grade = 'P' WHERE StudentId = ? AND CourseId = ?";
+					PreparedStatement updateStatement1 = connection.prepareStatement(sql_grade_update);
+					updateStatement1.setInt(1, StudentID);
+					updateStatement1.setInt(2, CourseID);
+					updateStatement1.executeUpdate();
+					updateStatement1.close();
 
-	                sql = "INSERT INTO DB2024_Grade(StudentId, CourseId, Grade, Semester, Repetition) VALUES (?, ?, ?, ?, TRUE)";
-	                System.out.println(StudentID + " 학생 재수강");
-	            }
-	        }
-	        resultSet_re.close();
-	        statement_re.close();
+					sql = "INSERT INTO DB2024_Grade(StudentId, CourseId, Grade, Semester, Repetition) VALUES (?, ?, ?, ?, TRUE)";
+					System.out.println(StudentID + " 학생 재수강");
+				}
+			}
+			resultSet_re.close();
+			statement_re.close();
 
-	        PreparedStatement statement = connection.prepareStatement(sql);
-	        statement.setInt(1, StudentID);
-	        statement.setInt(2, CourseID);
-	        statement.setString(3, selectedrb);
-	        statement.setString(4, semester);
-	        statement.executeUpdate();
-	        statement.close();
+			PreparedStatement statement = connection.prepareStatement(sql);
+			statement.setInt(1, StudentID);
+			statement.setInt(2, CourseID);
+			statement.setString(3, selectedrb);
+			statement.setString(4, semester);
+			statement.executeUpdate();
+			statement.close();
 
-	       
-	        connection.commit();// 모든 작업을 성공적으로 수행했다면(롤백이 되지 않았다면) 트랜잭션 커밋해서 저장해주기 
 
-	        grade_management_frame = new ProfessorGradeManagement();
-	        grade_management_frame.setVisible(true);
-	        setVisible(false);
-	    } catch (SQLException e) {
-	        try {
-	            connection.rollback();  // 롤백해서 트랜잭션 취소해준다. 
-	        } catch (SQLException ex) {
-	            ex.printStackTrace();
-	        }
-	        e.printStackTrace();
-	    } finally {
-	        try {
-	            if (connection != null) {
-	            	connection.close();
-	            }
-	        } catch (SQLException e) {
-	            e.printStackTrace();
-	        }
-	    }
+			connection.commit();// 모든 작업을 성공적으로 수행했다면(롤백이 되지 않았다면) 트랜잭션 커밋해서 저장해주기
+
+			grade_management_frame = new ProfessorGradeManagement();
+			grade_management_frame.setVisible(true);
+			setVisible(false);
+		} catch (SQLException e) {
+			try {
+				connection.rollback();  // 롤백해서 트랜잭션 취소해준다.
+			} catch (SQLException ex) {
+				ex.printStackTrace();
+			}
+			e.printStackTrace();
+		} finally {
+			try {
+				if (connection != null) {
+					connection.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
 	}
-
-
 }
-

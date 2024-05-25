@@ -1,24 +1,23 @@
-package student.domain;
+package worker.Student;
 
-public class StudentDomain {
-
-    private long studentID;
+public class Student {
+    private int studentID;
     private String name;
     private String department;
     private String email;
     private String contact;
-    private String pw;
+    private String password;
 
-    public StudentDomain(long studentID, String name, String department, String email, String contact, String pw) {
+    public Student(int studentID, String name, String department, String email, String contact, String password) {
         this.studentID = studentID;
         this.name = name;
         this.department = department;
         this.email = email;
         this.contact = contact;
-        this.pw = pw;
+        this.password = password;
     }
 
-    public long getStudentID() {
+    public int getStudentID() {
         return studentID;
     }
 
@@ -26,7 +25,7 @@ public class StudentDomain {
         return name;
     }
 
-    public String getDepartment(){
+    public String getDepartment() {
         return department;
     }
 
@@ -38,7 +37,7 @@ public class StudentDomain {
         return contact;
     }
 
-    public String getPw() {
-        return pw;
+    public String getPassword() {
+        return password;
     }
 }

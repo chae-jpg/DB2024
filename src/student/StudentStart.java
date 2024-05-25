@@ -1,21 +1,12 @@
-
 package student;
-
-import java.awt.EventQueue;
-
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
 
 import main.Start;
 
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
-import java.awt.Font;
-import javax.swing.JButton;
-import java.awt.event.ActionListener;
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class StudentStart extends JFrame {
 
@@ -131,5 +122,4 @@ public class StudentStart extends JFrame {
 		
 		
 	}
-
 }
