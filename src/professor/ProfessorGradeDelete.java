@@ -227,8 +227,9 @@ public class ProfessorGradeDelete extends JFrame {
 			resultSet.close();
 			statement.close();
 			connection.close();
+
 		} catch (ClassNotFoundException | SQLException e) {
-			e.printStackTrace();
+			System.out.println(e.getMessage());
 		}
 	}
 
@@ -236,33 +237,57 @@ public class ProfessorGradeDelete extends JFrame {
 
 		String id = Professor.getInstance().getId();
 
-		String sql = "DELETE FROM DB2024_Grade " + "WHERE StudentID = ? AND CourseID = ? AND Grade = ? ";
+		Connection connection = null;
+
+		String sql = "DELETE FROM DB2024_Grade WHERE StudentID = ? AND CourseID = ? AND Grade = ? ";
+
 		// Grade도 조건으로 두어서 재수강 같은 학번, 강의id가 같은 데이터를 구별해서 삭제할 수 있게 했다.
 
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
-
-			Connection connection = DriverManager.getConnection(url, username, password);
+			connection = DriverManager.getConnection(url, username, password);
+			connection.setAutoCommit(false); // 트랜잭션을 위해 AutoCommit false로 설정했다.
 
 			PreparedStatement statement = connection.prepareStatement(sql);
 
-			statement.setString(1, studentIdField.getText());
-			statement.setString(2, courseIdField.getText());
+			int studentID = Integer.parseInt(studentIdField.getText());
+			int courseID = Integer.parseInt(courseIdField.getText());
+			statement.setInt(1, studentID);
+			statement.setInt(2, courseID);
 			statement.setString(3, gradeField.getText());
+
+			System.out.println(studentIdField.getText());
+			System.out.println(courseIdField.getText());
+			System.out.println(gradeField.getText());
 
 			int rowsDeleted = statement.executeUpdate(); // 영향을 받은 갯수를 통해 삭제 여부를 확인할 수 있다.
 
 			if (rowsDeleted > 0) { // 0보다 크다면 삭제가 된 것이다.
+				System.out.println(rowsDeleted);
 				JOptionPane.showMessageDialog(this, "성적이 삭제되었습니다.");
+				connection.commit();
 			} else { // 0이하라면 삭제된 행이 존재하지 않다.
 				JOptionPane.showMessageDialog(this, "성적의 삭제에 실패했습니다.");
+				connection.rollback(); // 성적 삭제에 실패하면 rollback을 통해 트랜잭션을 취소해준다.
 			}
-
 			statement.close();
-			connection.close();
 
 		} catch (ClassNotFoundException | SQLException e) {
-			e.printStackTrace();
+			try {
+				connection.rollback(); // 예외 발생 시 롤백해서 트랜잭션을 취소해준다.
+			} catch (SQLException e1) {
+				System.out.println(e1.getMessage());
+			}
+			System.out.println(e.getMessage());
+		} finally {
+			try {
+				if (connection != null) {
+					connection.close();
+					System.out.println("connection close하기");
+				}
+			} catch (SQLException e) {
+				System.out.println(e.getMessage());
+			}
 		}
 	}
 

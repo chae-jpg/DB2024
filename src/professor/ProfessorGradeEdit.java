@@ -2,6 +2,7 @@ package professor;
 
 /*
  * 교수 - 성적 수정: 교수는 자신이 맡은 강의만 수정이 가능하다. 
+ * 트랜잭션을 통해 원자성, 지속성, 일관성, 고립성을 유지하게 해준다. 
  */
 import java.awt.EventQueue;
 import java.awt.Font;
@@ -224,66 +225,75 @@ public class ProfessorGradeEdit extends JFrame {
 
 			resultSet.close();
 			statement.close();
-			connection.close();
+			connection.close(); // 성적을 찾을 때는 트랜잭션을 사용하지 않았다.
 
 		} catch (ClassNotFoundException | SQLException e) {
-			e.printStackTrace();
+			System.out.println(e.getMessage());
 		}
 	}
 
 	private void updateGrade() {
 
-		// 선택한 것 중에 GradeID가 가장 최신 거 가져왔다. (재수강 데이터를 존재할 수 있기 떄문 )
-		String sql = "SELECT GradeID FROM DB2024_Grade " + "WHERE StudentID = ? AND CourseID = ? " + "ORDER BY GradeID "
-				+ "LIMIT 1;";
-
-		int gradeID = 0;
+		Connection connection = null;
 
 		try {
+
 			Class.forName("com.mysql.cj.jdbc.Driver");
-			Connection connection = DriverManager.getConnection(url, username, password);
+			connection = DriverManager.getConnection(url, username, password);
+			connection.setAutoCommit(false); // 트랜잭션을 위해 AutoCommit false로 설정했다.
 
-			PreparedStatement statement = connection.prepareStatement(sql);
+			// 선택한 것 중에 GradeID가 가장 최신 거 가져왔다. (재수강 데이터를 존재할 수 있기 때문)
+			String sql1 = "SELECT GradeID FROM DB2024_Grade WHERE StudentID = ? AND CourseID = ? ORDER BY GradeID LIMIT 1";
 
-			statement.setString(1, studentIdField.getText());
-			statement.setString(2, courseIdField.getText());
+			int gradeID = 0;
 
-			ResultSet resultSet = statement.executeQuery();
+			PreparedStatement statement1 = connection.prepareStatement(sql1);
+			statement1.setString(1, studentIdField.getText());
+			statement1.setString(2, courseIdField.getText());
+
+			ResultSet resultSet = statement1.executeQuery();
 
 			if (resultSet.next()) {
 				gradeID = resultSet.getInt("GradeID");
-			}
-			statement.close();
-
-			connection.close();
-		} catch (ClassNotFoundException | SQLException e) {
-			e.printStackTrace();
-		}
-
-		// 이 sql은 업데이트 하기 위한 것이다.
-		sql = "UPDATE DB2024_Grade SET Grade = ? " + "WHERE GradeId = ?";
-		try {
-			Class.forName("com.mysql.cj.jdbc.Driver");
-			Connection connection = DriverManager.getConnection(url, username, password);
-
-			PreparedStatement statement = connection.prepareStatement(sql);
-
-			statement.setString(1, gradeField.getText());
-			statement.setLong(2, gradeID);
-
-			int rowsUpdated = statement.executeUpdate();// 영향을 받은 갯수를 통해 수정 여부를 확인할 수 있다.
-
-			if (rowsUpdated > 0) {// 0보다 크다면 수정이 완료된 것이다.
-				JOptionPane.showMessageDialog(this, "성적이 수정되었습니다.");
 			} else {
-				// 0이라면 수정된 행이 존재하지 않는다.
-				JOptionPane.showMessageDialog(this, "성적의 수정에 실패했습니다.");
+				connection.rollback(); // 롤백해서 트랜잭션 취소
+				return;
 			}
 
-			statement.close();
-			connection.close();
-		} catch (ClassNotFoundException | SQLException e) {
-			e.printStackTrace();
+			// 이 sql은 업데이트 하기 위한 것이다.
+			String sql2 = "UPDATE DB2024_Grade SET Grade = ? WHERE GradeId = ?";
+			try (PreparedStatement statement2 = connection.prepareStatement(sql2)) {
+				statement2.setString(1, gradeField.getText());
+				statement2.setLong(2, gradeID);
+
+				int rowsUpdated = statement2.executeUpdate(); // 영향을 받은 갯수를 통해 수정 여부를 확인할 수 있다.
+
+				if (rowsUpdated > 0) { // 0보다 크다면 수정이 완료된 것이다.
+					JOptionPane.showMessageDialog(this, "성적이 수정되었습니다.");
+					connection.commit(); // connection을 commit해서 완료해준다.
+				} else {
+					JOptionPane.showMessageDialog(this, "성적의 수정에 실패했습니다.");
+					connection.rollback(); // 트랜잭션 롤백
+				}
+			}
+		} catch (SQLException | ClassNotFoundException e) {
+			System.out.println(e.getMessage());
+			try {
+				if (connection != null) {
+					connection.rollback(); // 예외 발생 시 롤백해서 트랜잭션을 취소해준다.
+				}
+			} catch (SQLException e1) {
+				System.out.println(e1.getMessage());
+			}
+		} finally {
+			try {
+				if (connection != null) {
+					connection.close();
+				}
+			} catch (SQLException e) {
+				System.out.println(e.getMessage());
+			}
 		}
 	}
+
 }
