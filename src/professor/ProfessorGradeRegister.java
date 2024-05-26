@@ -1,4 +1,5 @@
 package professor;
+
 import main.DatabaseConnection;
 /*
  * 교수는 자신이 수업하는 강의에 한해서 등록 가능하다. 
@@ -78,8 +79,9 @@ public class ProfessorGradeRegister extends JFrame {
 		textGrade.setBounds(94, 104, 39, 55);
 		panel.add(textGrade);
 
-		ButtonGroup bg = new ButtonGroup();
+		ButtonGroup bg = new ButtonGroup(); // ButtonGroup을 통해 여러 개의 RadioButton 중 하나만 선택할 수 있게 해준다.
 
+		// 아래는 A+~NP까지의 성적을 라디오 버튼으로 만든 것이다.
 		rdbtnAplus = new JRadioButton("A+");
 		rdbtnAplus.setBounds(145, 122, 61, 23);
 		bg.add(rdbtnAplus);
@@ -189,6 +191,8 @@ public class ProfessorGradeRegister extends JFrame {
 		btnRegister.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String selectedrb = null;
+				// getActionCommand를 통해 이벤트를 발생시킨 객체의 문자열을 가져와준다. 즉, A+에서 이벤트가 발생했다면, A+이라는 문자열을
+				// 가져올 것이다.
 				if (rdbtnAplus.isSelected()) {
 					selectedrb = rdbtnAplus.getActionCommand();
 				} else if (rdbtnA0.isSelected()) {
@@ -215,16 +219,16 @@ public class ProfessorGradeRegister extends JFrame {
 					selectedrb = rdbtnNP.getActionCommand();
 				}
 
-				String searchedSemester = textFieldSemester.getText(); // 학기 가져오기 (ex 1-1, 1-2, 2-1..)
-				String searchedCourse = textFieldCourse.getText(); // 강의 가져오기 (강의명 Or 강의id)
-				String searchedStudent = textFieldStudent.getText(); // 학생 가져오기 (학생명 Or 학생id)
+				String searchedSemester = textFieldSemester.getText(); // 학기를 가져온다. (ex 2024-1, 2024-2, 2023-1..)
+				String searchedCourse = textFieldCourse.getText(); // 강의를 가져온다. (강의명 Or 강의id)
+				String searchedStudent = textFieldStudent.getText(); // 학생을 가져온다. (학생명 Or 학생id)
 
-				System.out.println(selectedrb);
-				System.out.println(searchedSemester);
-				System.out.println(searchedCourse);
-				System.out.println(searchedStudent);
-
-				registerGrade(selectedrb, searchedSemester, searchedCourse, searchedStudent);
+				registerGrade(selectedrb, searchedSemester, searchedCourse, searchedStudent); // selectedrb,
+																								// searchedSemester,
+																								// searchedCourse,
+																								// searchedStudent를 인자로
+																								// 하여 registerGrade메서드를
+																								// 호출한다.
 			}
 		});
 		btnRegister.setBounds(653, 457, 117, 29);
@@ -243,15 +247,18 @@ public class ProfessorGradeRegister extends JFrame {
 
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			connection = DatabaseConnection.getConnection(); // 변경된 부분
+			if (connection == null) {
+				throw new SQLException("Database connection failed");
+			}
 			connection.setAutoCommit(false); // 트랜잭션을 위해 AutoCommit false로 설정했따.
 
 			int CourseID_temp = Integer.parseInt(searchedCourse); // integer형으로 바뀐다면, 즉 강의명이 아닌 강의id라면
 
 			try {
-				sql = "SELECT CourseID FROM DB2024_Course WHERE ProfessorID= ?"; // sql문 만들어서 courseid 찾아오기
+				sql = "SELECT CourseID FROM DB2024_Course WHERE ProfessorID= ?"; // sql문 만들어서 courseid를 찾아온다.
 
 				PreparedStatement statement = connection.prepareStatement(sql);
-				statement.setString(1, id); //id 설정
+				statement.setString(1, id); // ?의 첫 번째 값으로 id로 채워준다.
 
 				ResultSet resultSet = statement.executeQuery();
 
@@ -273,16 +280,17 @@ public class ProfessorGradeRegister extends JFrame {
 
 			} catch (SQLException e) {
 				connection.rollback(); // 롤백해서 트랜잭션 취소해준다.
-				e.printStackTrace();
+				System.out.println(e.getMessage());
 				return;
 			}
-		} catch (NumberFormatException e) { //Integer형으로 바뀌지 않는다는건 강의명을 입력으로 받아왔다는 뜻임
+		} catch (NumberFormatException e) { // Integer형으로 바뀌지 않는다는건 강의명을 입력으로 받아왔다는 뜻이다.
 			try {
-				sql = "SELECT CourseID FROM DB2024_Course WHERE CourseName=? AND ProfessorID= ?"; // sql문 만들어서 courseid 찾아오기
+				sql = "SELECT CourseID FROM DB2024_Course WHERE CourseName=? AND ProfessorID= ?"; // sql문 만들어서 courseid
+																									// 찾아오기
 
 				PreparedStatement statement = connection.prepareStatement(sql);
-				statement.setString(1, searchedCourse);
-				statement.setString(2, id);
+				statement.setString(1, searchedCourse); // ?의 첫 번재 값으로 searchedCours를 채워준다.
+				statement.setString(2, id); // ?의 두 번째 값으로 id를 채워준다.
 
 				ResultSet resultSet = statement.executeQuery();
 
@@ -291,25 +299,25 @@ public class ProfessorGradeRegister extends JFrame {
 					System.out.println("CourseID: " + CourseID);
 				} else {
 					System.out.println("결과가 없습니다.");
-					connection.rollback();  // 롤백해서 트랜잭션 취소해준다.
+					connection.rollback(); // 롤백해서 트랜잭션 취소해준다.
 					return;
 				}
 				resultSet.close();
 				statement.close();
 
-			} catch (SQLException ec1) {
+			} catch (SQLException e1) {
 				try {
 					connection.rollback(); // 롤백해서 트랜잭션 취소해준다.
-				} catch (SQLException e1) {
-					System.out.println(e1.getMessage());
+				} catch (SQLException e2) {
+					System.out.println(e2.getMessage());
 				}
-				System.out.println(ec1.getMessage());
+				System.out.println(e1.getMessage());
 				return;
 			}
 		} catch (ClassNotFoundException e1) {
-			e1.printStackTrace();
+			System.out.println(e1.getMessage());
 		} catch (SQLException e1) {
-			e1.printStackTrace();
+			System.out.println(e1.getMessage());
 		}
 
 		int StudentID = 0;
@@ -321,26 +329,26 @@ public class ProfessorGradeRegister extends JFrame {
 				sql = "SELECT StudentID FROM DB2024_Student WHERE Name=?"; // sql문 만들어서 학생id 찾아오기
 
 				PreparedStatement statement = connection.prepareStatement(sql);
-				statement.setString(1, searchedStudent);
+				statement.setString(1, searchedStudent); // ?의 첫 번째 값을 searchedStudent로 채워준다.
 				ResultSet resultSet = statement.executeQuery();
 
 				if (resultSet.next()) {
 					StudentID = resultSet.getInt("StudentID");
-					System.out.println("StudentID: " + StudentID);
 				} else {
 					System.out.println("결과가 없습니다.");
-					connection.rollback();  // 롤백해서 트랜잭션 취소해준다.
+					connection.rollback(); // 롤백해서 트랜잭션 취소해준다.
 					return;
 				}
 				resultSet.close();
 				statement.close();
-			} catch (SQLException ec2) {
+
+			} catch (SQLException e1) {
 				try {
-					connection.rollback();
-				} catch (SQLException e1) {
-					e1.printStackTrace();
-				}  // 롤백해서 트랜잭션 취소
-				ec2.printStackTrace();
+					connection.rollback(); // 롤백해서 트랜잭션 취소해준다.
+				} catch (SQLException e2) {
+					System.out.println(e2.getMessage());
+				}
+				System.out.println(e1.getMessage());
 				return;
 			}
 		}
@@ -361,50 +369,51 @@ public class ProfessorGradeRegister extends JFrame {
 			if (resultSet_re.next()) {
 				int count = resultSet_re.getInt(1);
 				if (count > 0) {
-					// 재수강이면 이전 GRADE를 P로 바꾸기
+					// 재수강이면 이전 GRADE를 P로 바꾼다.
 					String sql_grade_update = "UPDATE DB2024_Grade SET Grade = 'P' WHERE StudentId = ? AND CourseId = ?";
 					PreparedStatement updateStatement1 = connection.prepareStatement(sql_grade_update);
-					updateStatement1.setInt(1, StudentID);
-					updateStatement1.setInt(2, CourseID);
-					updateStatement1.executeUpdate();
+					updateStatement1.setInt(1, StudentID); // ?의 첫 번재 값을 StudentID로 채운다.
+					updateStatement1.setInt(2, CourseID); // ?의 두 번째 값을 CourseID로 채운다.
+					updateStatement1.executeUpdate();// 실행시킨다.
 					updateStatement1.close();
 
 					sql = "INSERT INTO DB2024_Grade(StudentId, CourseId, Grade, Semester, Repetition) VALUES (?, ?, ?, ?, TRUE)";
-					System.out.println(StudentID + " 학생 재수강");
 				}
 			}
 			resultSet_re.close();
 			statement_re.close();
 
 			PreparedStatement statement = connection.prepareStatement(sql);
-			statement.setInt(1, StudentID);
-			statement.setInt(2, CourseID);
-			statement.setString(3, selectedrb);
-			statement.setString(4, semester);
-			statement.executeUpdate();
+
+			statement.setInt(1, StudentID);// ?의 첫 번째 값을 StudentID로 채워준다.
+			statement.setInt(2, CourseID);// ?의 두 번째 값을 CourseID로 채워준다.
+			statement.setString(3, selectedrb);// ?의 세 번째 값을 selectedrb로 채워준다.
+			statement.setString(4, semester);// ?의 네 번째 값을 semester로 채워준다.
+			statement.executeUpdate(); // 실행시켜준다.
 			statement.close();
 
-
-			connection.commit();// 모든 작업을 성공적으로 수행했다면(롤백이 되지 않았다면) 트랜잭션 커밋해서 저장해주기
+			connection.commit();// 모든 작업을 성공적으로 수행했다면(롤백이 되지 않았다면) 트랜잭션 커밋해서 저장해준다.
 
 			grade_management_frame = new ProfessorGradeManagement();
 			grade_management_frame.setVisible(true);
 			setVisible(false);
+
 		} catch (SQLException e) {
 			try {
-				connection.rollback();  // 롤백해서 트랜잭션 취소해준다.
-			} catch (SQLException ex) {
-				ex.printStackTrace();
+				connection.rollback(); // 롤백해서 트랜잭션 취소해준다.
+			} catch (SQLException e1) {
+				System.out.println(e1.getMessage());
 			}
-			e.printStackTrace();
+			System.out.println(e.getMessage());
 		} finally {
 			try {
-				if (connection != null) {
+				if (connection != null) {// finally에서 connection이 Null이 아니라면 close해준다.
 					connection.close();
 				}
 			} catch (SQLException e) {
-				e.printStackTrace();
+				System.out.println(e.getMessage());
 			}
 		}
 	}
+
 }

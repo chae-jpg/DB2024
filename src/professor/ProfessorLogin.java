@@ -1,4 +1,5 @@
 package professor;
+
 import main.DatabaseConnection;
 import main.Start;
 
@@ -18,9 +19,6 @@ public class ProfessorLogin extends JFrame {
 	public static Start start_frame = null;
 
 	public static final String professorID = "";
-
-
-
 
 	public ProfessorLogin() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -96,10 +94,14 @@ public class ProfessorLogin extends JFrame {
 		getContentPane().add(homeButton);
 
 	}
+
 	private boolean Login(String id, String pw) {
 		try {
 
-			String sql = "SELECT count(*) FROM DB2024_Professor WHERE ProfessorID = ? AND Password = ?"; // id랑 password 맞는 행의 갯수를 구하는 쿼리를 구현해주었다.
+			String sql = "SELECT count(*) FROM DB2024_Professor WHERE ProfessorID = ? AND Password = ?"; // id랑 password
+																											// 맞는 행의 갯수를
+																											// 구하는 쿼리를
+																											// 구현해주었다.
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			Connection connection = DatabaseConnection.getConnection(); // 변경된 부분
 			PreparedStatement statement = connection.prepareStatement(sql);
