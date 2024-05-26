@@ -42,7 +42,7 @@ public class ProfessorManagement extends JFrame {
 	}
 
 	public ProfessorManagement() {
-		professorDAO = new ProfessorDAO();
+		professorDAO = new ProfessorDAO();//쿼리 실행을 위해 
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 800, 600);
@@ -66,8 +66,8 @@ public class ProfessorManagement extends JFrame {
 		panel.add(searchTextField);
 		searchTextField.setColumns(10);
 
-		btnSearch = new JButton("검색");
-		btnSearch.addActionListener(new ActionListener() {
+		btnSearch = new JButton("검색");//검색버튼
+		btnSearch.addActionListener(new ActionListener() {//검색버튼을 누르면 search함수가 실행되면서 검색결과를 보여줌
 			public void actionPerformed(ActionEvent e) {
 				String selectedItem = (String) comboBox.getSelectedItem();
 				String searchText = searchTextField.getText();
@@ -91,14 +91,14 @@ public class ProfessorManagement extends JFrame {
 
 		comboBox = new JComboBox<>();
 		String[] options = { "교수명", "교수id", "학과" };
-		comboBox.setModel(new DefaultComboBoxModel<>(options));
+		comboBox.setModel(new DefaultComboBoxModel<>(options));//콤보박스로 텍스트필드의 속성을 지정
 		comboBox.setSelectedItem("교수명"); // 기본 선택
 		comboBox.setBounds(101, 98, 101, 27);
 		panel.add(comboBox);
 
 		tableModel = new DefaultTableModel(
 				new Object[][] {},
-				new String[] { "ProfessorID", "Name", "Department", "Email", "Phone", "Password" }
+				new String[] { "ProfessorID", "Name", "Department", "Email", "Phone", "Password" }//검색결과 위한 테이블을 만든다.
 		);
 		table = new JTable(tableModel);
 		JScrollPane scrollPane = new JScrollPane(table);
@@ -107,18 +107,18 @@ public class ProfessorManagement extends JFrame {
 
 		btnRegister = new JButton("등록");
 		btnRegister.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				openProfessorForm(null);
+			public void actionPerformed(ActionEvent e) {//등록 버튼 눌렀을 때
+				openProfessorForm(null);// 입력받는 폼 페이지를 연다.
 			}
 		});
 		btnRegister.setBounds(537, 457, 75, 29);
 		panel.add(btnRegister);
 
-		btnModify = new JButton("수정");
-		btnModify.addActionListener(new ActionListener() {
+		btnModify = new JButton("수정");//수정버튼
+		btnModify.addActionListener(new ActionListener() {//수정 버튼 눌렀을때
 			public void actionPerformed(ActionEvent e) {
 				int selectedRow = table.getSelectedRow();
-				if (selectedRow >= 0) {
+				if (selectedRow >= 0) {// 선택된 열의 개수가 0개 이상일시에만 수정가능하다.
 					int professorID = (int) tableModel.getValueAt(selectedRow, 0);
 					Professor professor = professorDAO.getProfessorsById(professorID).get(0);
 					openProfessorForm(professor);
@@ -131,7 +131,7 @@ public class ProfessorManagement extends JFrame {
 		panel.add(btnModify);
 
 		btnDelete = new JButton("삭제");
-		btnDelete.addActionListener(new ActionListener() {
+		btnDelete.addActionListener(new ActionListener() {//삭제 버튼 눌렀을때
 			public void actionPerformed(ActionEvent e) {
 				int selectedRow = table.getSelectedRow();
 				if (selectedRow >= 0) {
@@ -151,15 +151,15 @@ public class ProfessorManagement extends JFrame {
 
 	private void searchProfessors(String criteria, String value) {
 		List<Professor> professors;
-		if (criteria.equals("교수명")) {
+		if (criteria.equals("교수명")) { //받아온 문자열이 교수명과 같다면 이름으로 교수 검색
 			professors = professorDAO.getProfessorsByName(value);
-		} else if (criteria.equals("교수id")) {
+		} else if (criteria.equals("교수id")) {// 받아온 문자열이 교수 아이디와 같다면 아이디로 교수 검색
 			int professorID = Integer.parseInt(value);
 			professors = professorDAO.getProfessorsById(professorID);
-		} else {
+		} else {// 나머지의 경우에는 학과로 검색한다.
 			professors = professorDAO.getProfessorsByDepartment(value);
 		}
-		displayProfessors(professors);
+		displayProfessors(professors);//검색결과
 	}
 
 	private void displayProfessors(List<Professor> professors) {
@@ -167,13 +167,13 @@ public class ProfessorManagement extends JFrame {
 		for (Professor professor : professors) {
 			tableModel.addRow(new Object[] {
 					professor.getProfessorID(), professor.getName(), professor.getDepartment(), professor.getEmail(),
-					professor.getPhone(), professor.getPassword()
+					professor.getPhone(), professor.getPassword()// 쿼리의 결과를 통해 테이블에 넣기
 			});
 		}
 	}
 
 	private void openProfessorForm(Professor professor) {
-		boolean isEditMode = (professor != null);
+		boolean isEditMode = (professor != null);//수정하는 중인지 나타내는 변수
 		ProfessorForm professorForm = new ProfessorForm(this, professor, isEditMode);
 		professorForm.setVisible(true);
 
