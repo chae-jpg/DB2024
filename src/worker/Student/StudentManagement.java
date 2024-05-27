@@ -9,9 +9,9 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
-
+//StudentManagement 클래스는 JFrame을 상속하여 학생 정보를 관리하는 창을 만듦.
 public class StudentManagement extends JFrame {
-
+	//사용자 인터페이스 요소들
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JPanel panel;
@@ -27,7 +27,7 @@ public class StudentManagement extends JFrame {
 	private JButton btnDelete;
 	public static WorkerStart start_frame = null;
 	private StudentDAO studentDAO;
-
+//main 메서드에서는 프로그램이 시작될 때 StudentManagement 클래스의 인스턴스를 생성하고 보여줌.
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -42,8 +42,8 @@ public class StudentManagement extends JFrame {
 	}
 
 	public StudentManagement() {
-		studentDAO = new StudentDAO();
-
+		studentDAO = new StudentDAO(); // 데이터베이스 연결을 위한 객체 생성.
+// UI 요소들을 초기화하고 배치.
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 800, 600);
 		contentPane = new JPanel();
@@ -148,7 +148,7 @@ public class StudentManagement extends JFrame {
 		// 초기 데이터 로드
 		displayStudents(studentDAO.getStudentsByName("")); // 모든 학생을 로드
 	}
-
+// 용자가 입력한 기준과 값을 받아서 해당하는 학생들을 검색하고 테이블에 표시
 	private void searchStudents(String criteria, String value) {
 		List<Student> students;
 		if (criteria.equals("학생명")) {
@@ -161,7 +161,7 @@ public class StudentManagement extends JFrame {
 		}
 		displayStudents(students);
 	}
-
+//주어진 학생 목록을 테이블에 표시
 	private void displayStudents(List<Student> students) {
 		tableModel.setRowCount(0); // Clear existing rows
 		for (Student student : students) {
@@ -171,7 +171,7 @@ public class StudentManagement extends JFrame {
 			});
 		}
 	}
-
+//학생 등록/수정 폼을 열기.
 	private void openStudentForm(Student student) {
 		boolean isEditMode = (student != null);
 		StudentForm studentForm = new StudentForm(this, student, isEditMode);
