@@ -114,10 +114,10 @@ public class ProfessorGradeEdit extends JFrame {
 			public void mouseClicked(MouseEvent e) {
 				int selectedRow = table.getSelectedRow();
 				if (selectedRow != -1) {
-					studentIdField.setText(table.getValueAt(selectedRow, 0).toString());
-					courseIdField.setText(table.getValueAt(selectedRow, 1).toString());
-					gradeField.setText(table.getValueAt(selectedRow, 2).toString());
-					semesterField.setText(table.getValueAt(selectedRow, 3).toString());
+					studentIdField.setText(table.getValueAt(selectedRow, 2).toString());
+					courseIdField.setText(table.getValueAt(selectedRow, 0).toString());
+					gradeField.setText(table.getValueAt(selectedRow, 4).toString());
+					semesterField.setText(table.getValueAt(selectedRow, 5).toString());
 				}
 			}
 		});
@@ -170,15 +170,12 @@ public class ProfessorGradeEdit extends JFrame {
 		String id = Professor.getInstance().getId();
 		String sql = "";
 
-		if (selectedItem.equalsIgnoreCase("학번")) { // 학번으로 입력을 받아왔을 때와 강의 id로 입력을 받아왔을 때 쿼리를 다르게 작성해주었다.
-			sql = "SELECT g.StudentID, g.CourseID, g.Grade, g.Semester, g.Repetition "
-					+ "FROM DB2024_Grade g, DB2024_Course c "
-					+ "WHERE g.CourseID = c.CourseID AND c.ProfessorID = ? AND g.StudentID = ?";
-
+		// 선택을 학번, 강의 id로 했을 때 바꾸었다.
+		// 뷰를 사용해 간결하게 sql문을 나타내고, 필요한 부분만 보이게 했다.
+		if (selectedItem.equalsIgnoreCase("학번")) {
+			sql = "SELECT * FROM DB2024_Grade_View WHERE ProfessorID = ? AND StudentID = ?";
 		} else if (selectedItem.equalsIgnoreCase("강의id")) {
-			sql = "SELECT g.StudentID, g.CourseID, g.Grade, g.Semester, g.Repetition "
-					+ "FROM DB2024_Grade g, DB2024_Course c "
-					+ "WHERE g.CourseID = c.CourseID AND c.ProfessorID = ? AND g.CourseID = ?";
+			sql = "SELECT * FROM DB2024_Grade_View WHERE ProfessorID = ? AND CourseID = ?";
 		}
 
 		try {
@@ -211,6 +208,7 @@ public class ProfessorGradeEdit extends JFrame {
 			resultSet.close();
 			statement.close();
 			connection.close();
+
 			// 성적을 찾을 때는 트랜잭션을 사용하지 않았다.
 
 		} catch (SQLException e) {

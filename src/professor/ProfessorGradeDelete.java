@@ -112,13 +112,10 @@ public class ProfessorGradeDelete extends JFrame {
 			public void mouseClicked(MouseEvent e) {
 				int selectedRow = table.getSelectedRow(); // table에서 행을 선택한 행을 가져온다.
 				if (selectedRow != -1) { // -1이 아니라면
-					studentIdField.setText(table.getValueAt(selectedRow, 0).toString()); // studentIdField를 선택한 행의 0번째
-																							// 값으로 채운다.
-					courseIdField.setText(table.getValueAt(selectedRow, 1).toString()); // courseIdField를 선택한 행의 1번째 값으로
-																						// 채운다.
-					gradeField.setText(table.getValueAt(selectedRow, 2).toString()); // gradeField를 선택한 행의 2번째 값으로 채운다.
-					semesterField.setText(table.getValueAt(selectedRow, 3).toString()); // semesterField를 선택한 행의 3번쨰 값으로
-																						// 채운다.
+					studentIdField.setText(table.getValueAt(selectedRow, 2).toString());
+					courseIdField.setText(table.getValueAt(selectedRow, 0).toString());
+					gradeField.setText(table.getValueAt(selectedRow, 4).toString());
+					semesterField.setText(table.getValueAt(selectedRow, 5).toString());
 				}
 			}
 		});
@@ -172,16 +169,12 @@ public class ProfessorGradeDelete extends JFrame {
 		String id = Professor.getInstance().getId();
 		String sql = "";
 
-		// 학번으로 입력을 받아왔을 때와 강의 id로 입력을 받아왔을 때 쿼리를 다르게 작성해주었다.
+		// 선택을 학번, 강의 id로 했을 때 바꾸었다.
+		// 뷰를 사용해 간결하게 sql문을 나타내고, 필요한 부분만 보이게 했다.
 		if (selectedItem.equalsIgnoreCase("학번")) {
-			sql = "SELECT g.StudentID, g.CourseID, g.Grade, g.Semester, g.Repetition "
-					+ "FROM DB2024_Grade g, DB2024_Course c "
-					+ "WHERE g.CourseID = c.CourseID AND c.ProfessorID = ? AND g.StudentID = ?";
-
+			sql = "SELECT * FROM DB2024_Grade_View WHERE ProfessorID = ? AND StudentID = ?";
 		} else if (selectedItem.equalsIgnoreCase("강의id")) {
-			sql = "SELECT g.StudentID, g.CourseID, g.Grade, g.Semester, g.Repetition "
-					+ "FROM DB2024_Grade g, DB2024_Course c "
-					+ "WHERE g.CourseID = c.CourseID AND c.ProfessorID = ? AND g.CourseID = ?";
+			sql = "SELECT * FROM DB2024_Grade_View WHERE ProfessorID = ? AND CourseID = ?";
 		}
 
 		try {

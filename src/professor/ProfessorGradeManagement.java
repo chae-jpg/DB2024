@@ -47,6 +47,9 @@ public class ProfessorGradeManagement extends JFrame {
 	}
 
 	public ProfessorGradeManagement() {
+
+		System.out.println("교수 id" + Professor.getInstance().getId());
+
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 800, 543);
 		contentPane = new JPanel();
@@ -154,18 +157,12 @@ public class ProfessorGradeManagement extends JFrame {
 		String sql = "";
 
 		if (selectedItem.equalsIgnoreCase("학번")) {
-			sql = "SELECT g.CourseID, c.CourseName, g.StudentID, s.Name, g.Grade, g.Semester, g.Repetition " // 학생명과
-																												// 강의명도
-																												// 나오게
-																												// 수정했습니다.
-					+ "FROM DB2024_Grade g, DB2024_Student s, DB2024_Course c "
-					+ "WHERE g.StudentID = s.StudentID AND g.CourseID = c.CourseID AND g.StudentID = ?";
+			sql = "SELECT CourseID, CourseName, StudentID, Name, Grade, Semester, Repetition FROM DB2024_Grade_View WHERE StudentID = ?"; // DB2024_Grade_View를
+																																			// 통해
+																																			// sql문을
+																																			// 작성해주었다.
 		} else if (selectedItem.equalsIgnoreCase("강의id")) {
-			sql = "SELECT g.CourseID, c.CourseName, g.StudentID, s.Name, g.Grade, g.Semester, g.Repetition "// 학생명과 강의명도
-																											// 나오게
-																											// 수정했습니다.
-					+ "FROM DB2024_Grade g, DB2024_Student s, DB2024_Course c "
-					+ "WHERE g.StudentID = s.StudentID AND g.CourseID = c.CourseID AND g.CourseID = ?";
+			sql = "SELECT CourseID, CourseName, StudentID, Name, Grade, Semester, Repetition FROM DB2024_Grade_View WHERE CourseID = ?";
 		}
 
 		try {

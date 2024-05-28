@@ -47,6 +47,9 @@ public class GradeViewStudent extends JFrame {
 	}
 
 	public GradeViewStudent() {
+
+		System.out.println("student id: " + Student.getInstance().getStudentId());
+
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 800, 543);
 		contentPane = new JPanel();
@@ -120,12 +123,9 @@ public class GradeViewStudent extends JFrame {
 
 		String sql = "";
 		if (selectedItem.equalsIgnoreCase("전체")) { // 전체라면 모든 학기 평점 다 보여준다.
-			sql = "SELECT c.CourseName, g.Grade, g.Semester, c.Credit "
-					+ "FROM DB2024_Grade g, DB2024_Course c "
-					+ "WHERE g.CourseID = c.CourseID AND g.StudentId = ? ";
+			sql = "SELECT CourseName, Grade, Semester, Credit, Repetition FROM DB2024_Grade_View WHERE StudentId = ?";
 		} else { // 전체가 아니면 선택한 학기만 보여준다.
-			sql = "SELECT c.CourseName, g.Grade, g.Semester, c.Credit " + "FROM DB2024_Grade g, DB2024_Course c "
-					+ "WHERE g.CourseID = c.CourseID AND g.StudentId = ? AND g.Semester = ? ";
+			sql = "SELECT CourseName, Grade, Semester, Credit, Repetition FROM DB2024_Grade_View WHERE StudentId = ? AND Semester = ?";
 		}
 
 		try {
