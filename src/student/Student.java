@@ -12,6 +12,11 @@ public class Student {
 		return student;
 	}
 
+	public void makeNull() {
+		// 싱글톤 개체 초기화
+		student = null;
+	}
+
 	public String getStudentId() {
 		return studentId;
 	}
@@ -21,4 +26,3 @@ public class Student {
 	}
 
 }
-

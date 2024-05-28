@@ -10,11 +10,16 @@ public class Professor {
 	private String email;
 	private String phone;
 
-	public static Professor getInstance() { //instance를 싱글톤으로 만들기
+	public static Professor getInstance() { // instance를 싱글톤으로 만들기
 		if (professor == null) {
 			professor = new Professor();
 		}
 		return professor;
+	}
+
+	public void makeNull() {
+		// 싱글톤 개체 초기화
+		professor = null;
 	}
 
 	public String getId() {

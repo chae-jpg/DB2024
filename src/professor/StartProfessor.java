@@ -116,6 +116,7 @@ public class StartProfessor extends JFrame {
 		homeButton = new JButton("home");
 		homeButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				Professor.getInstance().makeNull(); // null로 만들어서 로그아웃하기
 				start_frame = new Start();
 				start_frame.setVisible(true);
 				setVisible(false);
