@@ -229,7 +229,7 @@ public class ProfessorGradeEdit extends JFrame {
 			connection.setAutoCommit(false);// 트랜잭션을 위해 AutoCommit false로 설정했다.
 
 			// 선택한 것 중에 GradeID가 가장 최신 거 가져왔다. (재수강 데이터를 존재할 수 있기 때문)
-			String sql1 = "SELECT GradeID FROM DB2024_Grade WHERE StudentID = ? AND CourseID = ? ORDER BY GradeID LIMIT 1";
+			String sql1 = "SELECT GradeID FROM DB2024_Grade WHERE StudentID = ? AND CourseID = ? ORDER BY GradeID DESC LIMIT 1";
 
 			int gradeID = 0;
 
