@@ -26,6 +26,8 @@ public class StartProfessor extends JFrame {
 	public static ProfessorGradeManagement grade_management_frame = null;
 	public static TimetableProfessor timetable_frame = null;
 	public static Start start_frame = null;
+	public static CourseEvaluationManagemet eval_frame = null;
+	private JButton btn6;
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -77,7 +79,7 @@ public class StartProfessor extends JFrame {
 				setVisible(false);
 			}
 		});
-		btn2.setBounds(215, 187, 344, 52);
+		btn2.setBounds(215, 184, 344, 52);
 		panel.add(btn2);
 
 		btn3 = new JButton("3. 강의 수강자 명단 조회");
@@ -88,7 +90,7 @@ public class StartProfessor extends JFrame {
 				setVisible(false);
 			}
 		});
-		btn3.setBounds(215, 251, 344, 52);
+		btn3.setBounds(215, 245, 344, 52);
 		panel.add(btn3);
 
 		btn4 = new JButton("4. 성적 관리 ");
@@ -99,10 +101,10 @@ public class StartProfessor extends JFrame {
 				setVisible(false);
 			}
 		});
-		btn4.setBounds(215, 315, 344, 52);
+		btn4.setBounds(215, 306, 344, 52);
 		panel.add(btn4);
 
-		btn5 = new JButton("5. 시간표 조회");
+		btn5 = new JButton("6. 시간표 조회");
 		btn5.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				timetable_frame = new TimetableProfessor();
@@ -110,7 +112,7 @@ public class StartProfessor extends JFrame {
 				setVisible(false);
 			}
 		});
-		btn5.setBounds(215, 377, 344, 52);
+		btn5.setBounds(215, 428, 344, 52);
 		panel.add(btn5);
 
 		homeButton = new JButton("home");
@@ -124,5 +126,16 @@ public class StartProfessor extends JFrame {
 		homeButton.setFont(new Font("Dialog", Font.PLAIN, 12));
 		homeButton.setBounds(10, 10, 85, 29);
 		panel.add(homeButton);
+		
+		btn6 = new JButton("5. 강의평가 조회");
+		btn6.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				eval_frame = new CourseEvaluationManagemet();
+				eval_frame.setVisible(true);
+				setVisible(false);
+			}
+		});
+		btn6.setBounds(215, 367, 344, 52);
+		panel.add(btn6);
 	}
 }
