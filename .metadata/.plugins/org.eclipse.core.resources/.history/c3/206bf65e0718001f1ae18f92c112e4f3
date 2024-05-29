@@ -1,0 +1,65 @@
+package student;
+import java.awt.*;
+import javax.swing.*;
+
+public class CourseEvaluationModify extends JFrame {
+	private JLabel courseName;
+	private JLabel date;
+	private JTextField review;
+	private JTextField score;
+	public CourseEvaluationModify() {
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 641, 412);
+		getContentPane().setLayout(null);
+		
+		JLabel lblNewLabel = new JLabel("점수");
+		lblNewLabel.setFont(new Font("굴림", Font.PLAIN, 20));
+		lblNewLabel.setBounds(61, 204, 46, 32);
+		getContentPane().add(lblNewLabel);
+		
+		JLabel lblNewLabel_1 = new JLabel("강의평가 수정");
+		lblNewLabel_1.setFont(new Font("굴림", Font.PLAIN, 26));
+		lblNewLabel_1.setBounds(208, 34, 165, 43);
+		getContentPane().add(lblNewLabel_1);
+		
+		JLabel lblNewLabel_2 = new JLabel("강의평");
+		lblNewLabel_2.setFont(new Font("굴림", Font.PLAIN, 20));
+		lblNewLabel_2.setBounds(61, 246, 68, 32);
+		getContentPane().add(lblNewLabel_2);
+		
+		JLabel lblNewLabel_3 = new JLabel("강의명");
+		lblNewLabel_3.setFont(new Font("굴림", Font.PLAIN, 20));
+		lblNewLabel_3.setBounds(61, 118, 68, 32);
+		getContentPane().add(lblNewLabel_3);
+		
+		JLabel lblNewLabel_3_2 = new JLabel("날짜(xxxx-xx-xx)");
+		lblNewLabel_3_2.setFont(new Font("굴림", Font.PLAIN, 20));
+		lblNewLabel_3_2.setBounds(61, 162, 181, 32);
+		getContentPane().add(lblNewLabel_3_2);
+		
+		courseName = new JLabel("New label");
+		courseName.setFont(new Font("굴림", Font.PLAIN, 20));
+		courseName.setBounds(275, 118, 218, 32);
+		getContentPane().add(courseName);
+		
+		date = new JLabel("New label");
+		date.setFont(new Font("굴림", Font.PLAIN, 20));
+		date.setBounds(275, 162, 218, 32);
+		getContentPane().add(date);
+		
+		score = new JTextField();
+		score.setFont(new Font("굴림", Font.PLAIN, 20));
+		score.setBounds(275, 204, 104, 29);
+		getContentPane().add(score);
+		score.setColumns(10);
+		
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(275, 246, 291, 89);
+		getContentPane().add(scrollPane);
+		
+		review = new JTextField();
+		scrollPane.setViewportView(review);
+		review.setFont(new Font("굴림", Font.PLAIN, 20));
+		review.setColumns(10);
+	}
+}

@@ -1,0 +1,2 @@
+INDEX VERSION 1.131+C:\Users\chwon\Desktop\2024_EWHA\µ¥º£\DB2024\.metadata\.plugins\org.eclipse.jdt.core
+1865797976.index
