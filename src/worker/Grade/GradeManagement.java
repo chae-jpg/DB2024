@@ -111,6 +111,7 @@ public class GradeManagement extends JFrame {
 
         String sql = "";
 
+        // 직원은 성적에 대한 모든 정보의 조회가 가능하다.
         if (selectedItem.equals("학번")) {
             sql = "SELECT * FROM DB2024_Grade WHERE StudentId=?";
         } else if (selectedItem.equals("강의id")) {
@@ -125,7 +126,7 @@ public class GradeManagement extends JFrame {
             }
 
             PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setString(1, searchText);
+            statement.setString(1, searchText); // ?의 첫 번째를 searchText로 채워주었다.
             ResultSet resultSet = statement.executeQuery();
 
             DefaultTableModel model = new DefaultTableModel();
@@ -145,6 +146,7 @@ public class GradeManagement extends JFrame {
             resultSet.close();
             statement.close();
             connection.close();
+            // resultSet, statement, connection를 닫아주었다.
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         } catch (SQLException e) {
