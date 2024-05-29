@@ -1,9 +1,7 @@
 package professor;
+
 import main.DatabaseConnection;
-import professor.ProfessorGradeDelete;
-import professor.ProfessorGradeEdit;
-import professor.ProfessorGradeRegister;
-import professor.StartProfessor;
+
 /* 교수님은 자기가 담당하는 과목 성적의 입력, 수정, 삭제 가능하다. 
  * 단, 조회는 다 가능하게 구현해주었다.  */
 
@@ -49,6 +47,9 @@ public class ProfessorGradeManagement extends JFrame {
 	}
 
 	public ProfessorGradeManagement() {
+
+		System.out.println("교수 id" + Professor.getInstance().getId());
+
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 800, 543);
 		contentPane = new JPanel();
@@ -156,23 +157,17 @@ public class ProfessorGradeManagement extends JFrame {
 		String sql = "";
 
 		if (selectedItem.equalsIgnoreCase("학번")) {
-			sql = "SELECT g.CourseID, c.CourseName, g.StudentID, s.Name, g.Grade, g.Semester, g.Repetition " // 학생명과
-					// 강의명도
-					// 나오게
-					// 수정했습니다.
-					+ "FROM DB2024_Grade g, DB2024_Student s, DB2024_Course c "
-					+ "WHERE g.StudentID = s.StudentID AND g.CourseID = c.CourseID AND g.StudentID = ?";
+			sql = "SELECT CourseID, CourseName, StudentID, Name, Grade, Semester, Repetition FROM DB2024_Grade_View WHERE StudentID = ?";
 		} else if (selectedItem.equalsIgnoreCase("강의id")) {
-			sql = "SELECT g.CourseID, c.CourseName, g.StudentID, s.Name, g.Grade, g.Semester, g.Repetition "// 학생명과 강의명도
-					// 나오게
-					// 수정했습니다.
-					+ "FROM DB2024_Grade g, DB2024_Student s, DB2024_Course c "
-					+ "WHERE g.StudentID = s.StudentID AND g.CourseID = c.CourseID AND g.CourseID = ?";
+			sql = "SELECT CourseID, CourseName, StudentID, Name, Grade, Semester, Repetition FROM DB2024_Grade_View WHERE CourseID = ?";
 		}
 
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
-			Connection connection = DatabaseConnection.getConnection(); // 변경된 부분
+			Connection connection = DatabaseConnection.getConnection();
+			if (connection == null) {
+				throw new SQLException("Database connection failed");
+			}
 
 			PreparedStatement statement = connection.prepareStatement(sql);
 			statement.setString(1, searchText);
@@ -192,7 +187,6 @@ public class ProfessorGradeManagement extends JFrame {
 				}
 				model.addRow(row);
 			}
-
 			resultSet.close();
 			statement.close();
 			connection.close();
