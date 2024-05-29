@@ -19,7 +19,9 @@ public class CourseEvaluationModify extends JFrame {
 	private JScrollPane scrollPane;
 	private JButton modifyBtn;
 
+	//화면에 수정하고자 하는 데이터를 보여주는 메소드
 	public void showInfo(int id) {
+		//조인쿼리를 사용해 evaluationid에 해당하는 강의명을 찾는 쿼리
 		String nameText = "SELECT coursename FROM DB2024_COURSE c, DB2024_EVALUATION e WHERE c.courseid = e.courseid AND e.evaluationid = ?";
 		String query = "SELECT * FROM DB2024_EVALUATION WHERE evaluationid = ?";
 		try (Connection conn = DatabaseConnection.getConnection()) {
@@ -46,10 +48,12 @@ public class CourseEvaluationModify extends JFrame {
 		}
 	}
 
+	//사용자가 입력한 정보에 따라 데이터를 수정하는 메소드
 	public void updateResult(int id) {
 		String query = "UPDATE db2024_evaluation SET score = ?, comment = ? WHERE evaluationid = ?";
 		try (Connection conn = DatabaseConnection.getConnection();
 			 PreparedStatement pStmt = conn.prepareStatement(query)) {
+			//트랜젝션을 위해 오토커밋 해제
 			conn.setAutoCommit(false);
 			pStmt.setInt(1, Integer.parseInt(score.getText()));
 			pStmt.setString(2, review.getText());
@@ -57,10 +61,13 @@ public class CourseEvaluationModify extends JFrame {
 			pStmt.executeUpdate();
 			conn.commit();
 			System.out.println("수정 완료");
+			//오토커밋 설정
+			conn.setAutoCommit(true);
 		} catch (SQLException se) {
 			se.printStackTrace();
 			try (Connection conn = DatabaseConnection.getConnection()) {
 				if (conn != null) {
+					//연결에 문제가 있을 시 -> 롤백
 					conn.rollback();
 				}
 			} catch (SQLException se2) {

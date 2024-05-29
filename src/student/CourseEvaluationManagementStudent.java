@@ -31,6 +31,7 @@ public class CourseEvaluationManagementStudent extends JFrame {
 	public static CourseEvaluationModify modify_frame = null;
 	public static CourseEvaluationAdd add_frame = null;
 
+	//해당 강의평가를 수정 또는 삭제할 권한이 있는지 확인하는 메소드
 	public boolean checkValid(int id) {
 		String sql = "SELECT studentid FROM DB2024_EVALUATION WHERE evaluationid = ?";
 		try (Connection conn = DatabaseConnection.getConnection();
@@ -38,6 +39,7 @@ public class CourseEvaluationManagementStudent extends JFrame {
 			pStmt.setInt(1, id);
 			ResultSet rs = pStmt.executeQuery();
 			if (rs.next()) {
+				//조회한 학생 id가 Student 객체의 id와 동일한지 리턴
 				return rs.getInt(1) == Integer.parseInt(Student.getInstance().getStudentId());
 			}
 		} catch (SQLException se) {
@@ -46,6 +48,7 @@ public class CourseEvaluationManagementStudent extends JFrame {
 		return false;
 	}
 
+	//열의 사이즈를 자동으로 조절해주는 메소드
 	public void resizeColumnWidth(JTable table) {
 		final TableColumnModel columnModel = table.getColumnModel();
 		for (int column = 0; column < table.getColumnCount(); column++) {
@@ -60,14 +63,16 @@ public class CourseEvaluationManagementStudent extends JFrame {
 			columnModel.getColumn(column).setPreferredWidth(width);
 		}
 	}
-
+	
+	//강의명과 학수번호에 따라 강의평가를 검색하는 메소드
 	private void searchEval(String selectedItem, String searchText) {
 		String sql = "";
 
 		if (selectedItem.equals("강의명")) {
-			sql = "SELECT evaluationid, score, date, comment, courseid FROM DB2024_EVALUATION WHERE CourseID = (SELECT CourseID FROM DB2024_COURSE WHERE CourseName=?)";
+			//중첩쿼리를 사용해 해당 강의명을 가진 모든 강의평을 뷰에서 조회
+			sql = "SELECT * FROM DB2024_EvaluationView WHERE CourseID = (SELECT CourseID FROM DB2024_COURSE WHERE CourseName=?)";
 		} else if (selectedItem.equals("학수번호")) {
-			sql = "SELECT evaluationid, score, date, comment, courseid FROM DB2024_EVALUATION WHERE CourseId=?";
+			sql = "SELECT * FROM DB2024_EvaluationView WHERE CourseId=?";
 		}
 
 		try (Connection connection = DatabaseConnection.getConnection();
@@ -78,7 +83,8 @@ public class CourseEvaluationManagementStudent extends JFrame {
 
 			DefaultTableModel model = new DefaultTableModel();
 			table.setModel(model);
-
+			
+			//화면에 데이터를 표시
 			for (int i = 1; i <= resultSet.getMetaData().getColumnCount(); i++) {
 				model.addColumn(resultSet.getMetaData().getColumnName(i));
 			}
@@ -96,22 +102,26 @@ public class CourseEvaluationManagementStudent extends JFrame {
 			e.printStackTrace();
 		}
 	}
-
+	
+	//선택한 데이터를 삭제하는 메소드
 	private void deleteEval(int id) {
 		String deleteQuery = "DELETE FROM DB2024_EVALUATION WHERE evaluationID = ?";
 		try (Connection conn = DatabaseConnection.getConnection();
 			 PreparedStatement pStmt = conn.prepareStatement(deleteQuery)) {
-
+			
+			//트랜젝션 설정을 위해 오토커밋 헤제
 			conn.setAutoCommit(false);
 			pStmt.setInt(1, id);
 			pStmt.executeUpdate();
+			//커밋
 			conn.commit();
 			System.out.println(id + " deleted");
-
+			conn.setAutoCommit(true);
 		} catch (SQLException se) {
 			se.printStackTrace();
 			try (Connection conn = DatabaseConnection.getConnection()) {
 				if (conn != null) {
+					//연결에 문제가 있을 시 -> 롤백
 					conn.rollback();
 				}
 			} catch (SQLException se2) {
@@ -209,6 +219,7 @@ public class CourseEvaluationManagementStudent extends JFrame {
 					JOptionPane.showMessageDialog(null, "수정할 항목을 선택하세요.", "오류", JOptionPane.ERROR_MESSAGE);
 					return;
 				}
+				//선택한 행의 강의평가id를 가져옴
 				int eval_id = Integer.parseInt(table.getModel().getValueAt(row, 0).toString());
 				if (!checkValid(eval_id)) {
 					JOptionPane.showMessageDialog(null, "작성하지 않은 강의평을 선택했거나, 데이터베이스 접속에 실패했습니다.", "오류", JOptionPane.ERROR_MESSAGE);

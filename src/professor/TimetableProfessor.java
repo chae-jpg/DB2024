@@ -10,10 +10,9 @@ import java.awt.event.ActionListener;
 import java.sql.*;
 
 public class TimetableProfessor extends JFrame {
-	// JDBC driver name and database URL
-	static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
 	public static StartProfessor start_frame = null;
-
+	
+	//요일별 칸을 표시하기 위한 패널 선언
 	private Panel mon12;
 	private Panel fri56;
 	private Panel fri45;
@@ -241,7 +240,8 @@ public class TimetableProfessor extends JFrame {
 		fri56.setBounds(647, 403, 126, 101);
 		getContentPane().add(fri56);
 		fri56.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
-
+		
+		//패널을 요일, 교시에 따라 배열로 묶어 관리
 		Panel[][] pArr = { { mon12, mon23, mon34, mon45, mon56 }, { tue12, tue23, tue34, tue45, tue56 },
 				{ wed12, wed23, wed34, wed45, wed56 }, { thu12, thu23, thu34, thu45, thu56 },
 				{ fri12, fri23, fri34, fri45, fri56 } };
@@ -254,7 +254,8 @@ public class TimetableProfessor extends JFrame {
 		showTable(pArr);
 
 	}
-
+	
+	//화면에 시간표를 그리도록 설정하는 메소드
 	private void showTable(Panel[][] pArr) {
 		String sql = "SELECT courseid from DB2024_COURSE WHERE professorid = ?";
 		String sqlname = "SELECT name from DB2024_PROFESSOR WHERE professorid = ?";
@@ -277,6 +278,7 @@ public class TimetableProfessor extends JFrame {
 				PreparedStatement pStmt2 = conn.prepareStatement(sql2);
 				pStmt2.setInt(1, cid);
 				ResultSet crs = pStmt2.executeQuery();
+				//불러온 강의를 colorTable 메소드를 호출해 패널로 나타냄.
 				colorTable(pArr, crs);
 			}
 
@@ -286,12 +288,14 @@ public class TimetableProfessor extends JFrame {
 
 	}
 
+	//시간표를 색칠하고 안에 글자를 집어넣는 메소드
 	private void colorTable(Panel[][] pArr, ResultSet crs) {
 		int day = 0, time = 0;
 		try {
 			while (crs.next()) {
 				System.out.println(crs.getString(6));
 				System.out.println(crs.getString(7));
+				//요일과 시간에 따라 어떤 칸을 칠할지 결정
 				switch (crs.getString(6)) {
 					case "월요일":
 						day = 0;
@@ -327,6 +331,7 @@ public class TimetableProfessor extends JFrame {
 						break;
 				}
 				Panel sel = pArr[day][time];
+				//시간표 칸 색을 표시
 				sel.setVisible(true);
 				sel.setBackground(Color.GREEN);
 				String cname = crs.getString(2);
@@ -334,6 +339,7 @@ public class TimetableProfessor extends JFrame {
 				String t = crs.getString(7);
 				String pname = "";
 				int pid = crs.getInt(8);
+				//교수 id를 이용해 교수 이름을 검색
 				String psql = "Select name from db2024_professor where professorid = ?";
 				Connection conn = DatabaseConnection.getConnection();
 				PreparedStatement ppStmt = conn.prepareStatement(psql);
@@ -342,6 +348,7 @@ public class TimetableProfessor extends JFrame {
 				while (pset.next()) {
 					pname = pset.getString(1);
 				}
+				//시간표 칸 글자를 표시
 				JLabel cnameLabel = new JLabel(cname);
 				JLabel roomLabel = new JLabel(room);
 				JLabel tLabel = new JLabel(t);

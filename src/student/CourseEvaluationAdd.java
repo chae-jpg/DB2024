@@ -22,6 +22,7 @@ public class CourseEvaluationAdd extends JFrame {
 	Date today = new Date();
 	SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
+	//사용자가 입력한 값에 따라 강의평가를 새롭게 등록하는 메소드
 	public void AddResult() {
 		String query = "INSERT INTO db2024_evaluation(score, comment, date, courseid, studentID) values (?, ?, ?, ?, ?)";
 		Connection conn = null;
@@ -29,7 +30,8 @@ public class CourseEvaluationAdd extends JFrame {
 		try {
 			conn = DatabaseConnection.getConnection();
 			pStmt = conn.prepareStatement(query);
-
+			
+			//트랜젝션을 위해 오토커밋 해제
 			conn.setAutoCommit(false);
 			pStmt.setInt(1, Integer.parseInt(score.getText()));
 			pStmt.setString(2, review.getText());
@@ -39,12 +41,15 @@ public class CourseEvaluationAdd extends JFrame {
 			pStmt.executeUpdate();
 			conn.commit();
 			System.out.println("등록 완료");
+			//오토커밋 적용
+			conn.setAutoCommit(true);
 			setVisible(false);
 		} catch (SQLException se) {
 			se.printStackTrace();
-			System.out.println("execute rollback");
 			try {
 				if (conn != null) {
+					//연결에 문제가 있을 시 -> 롤백
+					System.out.println("execute rollback");
 					conn.rollback();
 				}
 			} catch (SQLException se2) {

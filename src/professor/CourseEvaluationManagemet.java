@@ -26,6 +26,7 @@ public class CourseEvaluationManagemet extends JFrame {
 
 	public static StartProfessor start_frame = null;
 
+	//열의 사이즈를 자동으로 조절해주는 메소드
 	private void resizeColumnWidth(JTable table) {
 		final TableColumnModel columnModel = table.getColumnModel();
 		for (int column = 0; column < table.getColumnCount(); column++) {
@@ -40,15 +41,19 @@ public class CourseEvaluationManagemet extends JFrame {
 			columnModel.getColumn(column).setPreferredWidth(width);
 		}
 	}
-
+	
+	//강의명과 학수번호에 따라 강의평가를 검색하는 메소드
 	private void searchEval(String selectedItem, String searchText) {
 		String sql = "";
 
+		//강의명을 입력했을 시
 		if (selectedItem.equals("강의명")) {
-			sql = "SELECT * FROM DB2024_EVALUATION WHERE "
+			//중첩 쿼리를 사용해 해당 강의명을 가진 모든 강의평가를 뷰에서 조회
+			sql = "SELECT * FROM DB2024_EvaluationView WHERE "
 					+ "CourseID = (SELECT CourseID From DB2024_COURSE WHERE CourseName=?)";
+		//학수번호를 입력했을 시
 		} else if (selectedItem.equals("학수번호")) {
-			sql = "SELECT * FROM DB2024_EVALUATION WHERE CourseId=?";
+			sql = "SELECT * FROM DB2024_EvaluationView WHERE CourseId=?";
 		}
 
 		try {
@@ -64,6 +69,7 @@ public class CourseEvaluationManagemet extends JFrame {
 			DefaultTableModel model = new DefaultTableModel();
 			table.setModel(model);
 
+			//표에 데이터를 표시
 			for (int i = 1; i <= resultSet.getMetaData().getColumnCount(); i++) {
 				model.addColumn(resultSet.getMetaData().getColumnName(i));
 			}
