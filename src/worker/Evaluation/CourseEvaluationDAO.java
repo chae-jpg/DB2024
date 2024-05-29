@@ -1,7 +1,6 @@
 package worker.Evaluation;
 
 import main.DatabaseConnection;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -10,6 +9,7 @@ import java.util.List;
 
 public class CourseEvaluationDAO {
 
+    // 강의명으로 평가를 조회하는 메서드
     public List<Evaluation> getEvaluationsByCourseName(String courseName) {
         List<Evaluation> evaluations = new ArrayList<>();
         Connection connection = DatabaseConnection.getConnection();
@@ -36,6 +36,7 @@ public class CourseEvaluationDAO {
         return evaluations;
     }
 
+    // 학수 번호로 평가를 조회하는 메서드
     public List<Evaluation> getEvaluationsByCourseID(int courseID) {
         List<Evaluation> evaluations = new ArrayList<>();
         Connection connection = DatabaseConnection.getConnection();
@@ -58,6 +59,7 @@ public class CourseEvaluationDAO {
         return evaluations;
     }
 
+    // 모든 평가를 조회하는 메서드
     public List<Evaluation> getAllEvaluations() {
         List<Evaluation> evaluations = new ArrayList<>();
         Connection connection = DatabaseConnection.getConnection();
@@ -80,6 +82,7 @@ public class CourseEvaluationDAO {
         return evaluations;
     }
 
+    // 평가를 삭제하는 메서드
     public void deleteEvaluation(int evaluationID) {
         Connection connection = DatabaseConnection.getConnection();
         try {

@@ -11,7 +11,8 @@ import java.util.List;
 
 public class CourseDAO {
 
-    public List<Student> getStudentsByCourseName(String courseName) { // 강의명으로 수강자 조회
+    // 강의명으로 수강자를 조회하는 메서드
+    public List<Student> getStudentsByCourseName(String courseName) {
         List<Student> students = new ArrayList<>();
         Connection connection = DatabaseConnection.getConnection();
         try {
@@ -38,7 +39,8 @@ public class CourseDAO {
         return students;
     }
 
-    public List<Student> getStudentsByCourseID(int courseID) { // 학수번호로 수강자 조회
+    // 학수번호로 수강자를 조회하는 메서드
+    public List<Student> getStudentsByCourseID(int courseID) {
         List<Student> students = new ArrayList<>();
         Connection connection = DatabaseConnection.getConnection();
         try {
@@ -65,7 +67,8 @@ public class CourseDAO {
         return students;
     }
 
-    public List<Course> getCoursesByStudentName(String studentName) { // 학생 이름으로 수강 과목 조회
+    // 학생 이름으로 수강 과목을 조회하는 메서드
+    public List<Course> getCoursesByStudentName(String studentName) {
         List<Course> courses = new ArrayList<>();
         Connection connection = DatabaseConnection.getConnection();
         try {
@@ -85,7 +88,8 @@ public class CourseDAO {
         return courses;
     }
 
-    public List<Course> getCoursesByStudentID(int studentID) { // 학번으로 수강 과목 조회
+    // 학번으로 수강 과목을 조회하는 메서드
+    public List<Course> getCoursesByStudentID(int studentID) {
         List<Course> courses = new ArrayList<>();
         Connection connection = DatabaseConnection.getConnection();
         try {
@@ -105,7 +109,8 @@ public class CourseDAO {
         return courses;
     }
 
-    public List<Course> getCoursesByName(String courseName) { // 강의명으로 강의 조회
+    // 강의명으로 강의를 조회하는 메서드
+    public List<Course> getCoursesByName(String courseName) {
         List<Course> courses = new ArrayList<>();
         Connection connection = DatabaseConnection.getConnection();
         try {
@@ -122,7 +127,8 @@ public class CourseDAO {
         return courses;
     }
 
-    public List<Course> getCoursesByID(int courseID) { // 학수 번호로 강의 조회
+    // 학수 번호로 강의를 조회하는 메서드
+    public List<Course> getCoursesByID(int courseID) {
         List<Course> courses = new ArrayList<>();
         Connection connection = DatabaseConnection.getConnection();
         try {
@@ -139,7 +145,8 @@ public class CourseDAO {
         return courses;
     }
 
-    public List<Course> getCoursesByProfessor(String professorName) { // 교수 명으로 강의 조회
+    // 교수 명으로 강의를 조회하는 메서드
+    public List<Course> getCoursesByProfessor(String professorName) {
         List<Course> courses = new ArrayList<>();
         Connection connection = DatabaseConnection.getConnection();
         try {
@@ -158,6 +165,7 @@ public class CourseDAO {
         return courses;
     }
 
+    // 강의를 추가하는 메서드
     public void addCourse(Course course) {
         Connection connection = DatabaseConnection.getConnection();
         try {
@@ -177,6 +185,7 @@ public class CourseDAO {
         }
     }
 
+    // 강의를 업데이트하는 메서드
     public void updateCourse(Course course) {
         Connection connection = DatabaseConnection.getConnection();
         try {
@@ -196,6 +205,7 @@ public class CourseDAO {
         }
     }
 
+    // 강의를 삭제하는 메서드
     public void deleteCourse(int courseID) {
         Connection connection = DatabaseConnection.getConnection();
         try {
@@ -208,6 +218,7 @@ public class CourseDAO {
         }
     }
 
+    // 모든 강의를 조회하는 메서드
     public List<Course> getAllCourses() {
         List<Course> courses = new ArrayList<>();
         Connection connection = DatabaseConnection.getConnection();
@@ -223,6 +234,8 @@ public class CourseDAO {
         }
         return courses;
     }
+
+    // 교수 명으로 모든 학생을 조회하는 메서드
     public List<Student> getAllStudentsByProfessor(String professorName) {
         List<Student> students = new ArrayList<>();
         Connection connection = DatabaseConnection.getConnection();
@@ -250,6 +263,7 @@ public class CourseDAO {
         return students;
     }
 
+    // ResultSet을 Course 객체로 변환하는 메서드
     private Course mapCourse(ResultSet resultSet) throws Exception {
         int courseID = resultSet.getInt("CourseID");
         String courseName = resultSet.getString("CourseName");
@@ -261,6 +275,4 @@ public class CourseDAO {
         int professorID = resultSet.getInt("ProfessorID");
         return new Course(courseID, courseName, classroom, credit, semester, day, time, professorID);
     }
-
-
 }
