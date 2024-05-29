@@ -1,7 +1,5 @@
 package worker.Grade;
 
-import worker.WorkerStart;
-
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
@@ -29,7 +27,7 @@ public class GradeManagement extends JFrame {
     private JComboBox comboBox;
     private JTable table;
 
-    public static WorkerStart start_frame = null;
+    public static worker.WorkerStart start_frame = null;
 
     public static void main(String[] args) {
         EventQueue.invokeLater(new Runnable() {
@@ -84,7 +82,7 @@ public class GradeManagement extends JFrame {
         homeButton = new JButton("home");
         homeButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                start_frame = new WorkerStart();
+                start_frame = new worker.WorkerStart();
                 start_frame.setVisible(true);
                 setVisible(false);
             }
@@ -113,11 +111,9 @@ public class GradeManagement extends JFrame {
 
         String sql = "";
 
-        // 선택 item에 따라 다르게 sql 쿼리 작성해주었습니다.
-        // worker는 DB2024_Grade에 대한 모든 정보를 확인할 수 있습니다.
-        if (selectedItem.equals("학번")) { // 선택한 게 학번이라면
+        if (selectedItem.equals("학번")) {
             sql = "SELECT * FROM DB2024_Grade WHERE StudentId=?";
-        } else if (selectedItem.equals("강의id")) { // 선택한게 강의id라면
+        } else if (selectedItem.equals("강의id")) {
             sql = "SELECT * FROM DB2024_Grade WHERE CourseId=?";
         }
 
@@ -129,7 +125,7 @@ public class GradeManagement extends JFrame {
             }
 
             PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setString(1, searchText); // ?의 첫 번째를 searchText로 설정해주었습니다.
+            statement.setString(1, searchText);
             ResultSet resultSet = statement.executeQuery();
 
             DefaultTableModel model = new DefaultTableModel();
