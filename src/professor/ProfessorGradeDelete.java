@@ -256,6 +256,7 @@ public class ProfessorGradeDelete extends JFrame {
 		} finally {
 			try {
 				if (connection != null) {
+					connection.setAutoCommit(true); // AutoCommit을 true로 돌려준다.
 					connection.close();// 마지막에 finally를 통해 connection이 null이 아니라면 close해준다.
 				}
 			} catch (SQLException e) {
