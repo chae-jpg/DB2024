@@ -19,14 +19,14 @@ public class StartProfessor extends JFrame {
     private JButton btn3;
     private JButton btn4;
     private JButton btn5;
-    private JButton btn6; 
+    private JButton btn6;
     private JButton homeButton;
     public static ProfessorStudentManagement student_management_frame = null;
     public static ProfessorManagement professor_management_frame = null;
     public static ProfessorStudentsByCourse student_by_course_frame = null;
     public static ProfessorGradeManagement grade_management_frame = null;
     public static TimetableProfessor timetable_frame = null;
-    public static CourseEvaluationManagemet eval_frame = null; 
+    public static CourseEvaluationManagemet eval_frame = null;
     public static Start start_frame = null;
 
     public static void main(String[] args) {
@@ -104,7 +104,7 @@ public class StartProfessor extends JFrame {
         btn4.setBounds(215, 306, 344, 52);
         panel.add(btn4);
 
-        btn5 = new JButton("6. 시간표 조회"); 
+        btn5 = new JButton("6. 시간표 조회");
         btn5.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 timetable_frame = new TimetableProfessor();
@@ -115,7 +115,7 @@ public class StartProfessor extends JFrame {
         btn5.setBounds(215, 428, 344, 52);
         panel.add(btn5);
 
-        btn6 = new JButton("5. 강의평가 조회"); 
+        btn6 = new JButton("5. 강의평가 조회");
         btn6.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 eval_frame = new CourseEvaluationManagemet();
@@ -129,6 +129,7 @@ public class StartProfessor extends JFrame {
         homeButton = new JButton("home");
         homeButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                Professor.getInstance().makeNull(); // null로 만들어서 로그아웃하기
                 start_frame = new Start();
                 start_frame.setVisible(true);
                 setVisible(false);
