@@ -50,27 +50,26 @@ public class StudentCoursesView extends JFrame {
         title.setBounds(250, 30, 300, 50);
         contentPane.add(title);
 
-        searchTextField = new JTextField("학생 이름 or 학번을 입력하세요");
+        searchTextField = new JTextField("학번을 입력하세요");
         searchTextField.setBounds(214, 97, 344, 26);
         contentPane.add(searchTextField);
         searchTextField.setColumns(10);
 
         comboBox = new JComboBox<>();
-        String[] options = { "학생 이름", "학번" };
+        String[] options = { "학번" };
         comboBox.setModel(new DefaultComboBoxModel<>(options));
-        comboBox.setSelectedItem("학생 이름"); // 기본 선택
+        comboBox.setSelectedItem("학번"); // 기본 선택
         comboBox.setBounds(101, 98, 101, 27);
         contentPane.add(comboBox);
 
         JButton btnSearch = new JButton("검색");
         btnSearch.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                String selectedItem = (String) comboBox.getSelectedItem();
                 String searchText = searchTextField.getText();
-                searchCourses(selectedItem, searchText);
+                searchCourses(searchText);
             }
         });
-        btnSearch.setBounds(554, 97, 58, 29);
+        btnSearch.setBounds(574, 97, 75, 29);
         contentPane.add(btnSearch);
 
         JButton homeButton = new JButton("home");
@@ -92,24 +91,20 @@ public class StudentCoursesView extends JFrame {
         contentPane.add(scrollPane);
     }
 
-    private void searchCourses(String criteria, String value) {
+    private void searchCourses(String value) {
         List<Course> courses;
-        if (criteria.equals("학생 이름")) {
-            courses = courseDAO.getCoursesByStudentName(value);
-        } else {
-            try {
-                int studentID = Integer.parseInt(value);
-                courses = courseDAO.getCoursesByStudentID(studentID);
-            } catch (NumberFormatException e) {
-                JOptionPane.showMessageDialog(contentPane, "유효한 학번을 입력하세요.", "입력 오류", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
+        try {
+            int studentID = Integer.parseInt(value);
+            courses = courseDAO.getCoursesByStudentID(studentID);
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(contentPane, "유효한 학번을 입력하세요.", "입력 오류", JOptionPane.ERROR_MESSAGE);
+            return;
         }
         displayCourses(courses);
     }
 
     private void displayCourses(List<Course> courses) {
-        tableModel.setRowCount(0); // Clear existing rows
+        tableModel.setRowCount(0); // 기존 행을 지웁니다.
         for (Course course : courses) {
             tableModel.addRow(new Object[] {
                     course.getCourseID(), course.getCourseName(), course.getClassroom(), course.getCredit(),
