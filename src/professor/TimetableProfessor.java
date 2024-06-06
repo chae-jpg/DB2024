@@ -295,6 +295,7 @@ public class TimetableProfessor extends JFrame {
 			while (crs.next()) {
 				System.out.println(crs.getString(6));
 				System.out.println(crs.getString(7));
+				if (!(crs.getString("Semester").equals("2024-1"))) continue;
 				//요일과 시간에 따라 어떤 칸을 칠할지 결정
 				switch (crs.getString(6)) {
 					case "월요일":
