@@ -157,6 +157,7 @@ public class ProfessorGradeDelete extends JFrame {
 		panel.add(semesterLabel);
 		semesterField = new JTextField();
 		semesterField.setBounds(450, 320, 150, 25);
+		semesterField.setEditable(false); // 수정 안되게 false로 설정해주었다.
 		panel.add(semesterField);
 
 		JLabel repetitionLabel = new JLabel("재수강:");
