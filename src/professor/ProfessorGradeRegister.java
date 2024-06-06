@@ -147,9 +147,9 @@ public class ProfessorGradeRegister extends JFrame {
 		textSemester.setBounds(57, 191, 65, 55);
 		panel.add(textSemester);
 
-		textCourse = new JLabel("강의");
+		textCourse = new JLabel("강의id");
 		textCourse.setFont(new Font("Lucida Grande", Font.PLAIN, 20));
-		textCourse.setBounds(57, 281, 65, 55);
+		textCourse.setBounds(57, 281, 80, 55);
 		panel.add(textCourse);
 
 		textStudent = new JLabel("학생");
