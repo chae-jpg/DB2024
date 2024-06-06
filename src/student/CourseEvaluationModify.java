@@ -50,15 +50,19 @@ public class CourseEvaluationModify extends JFrame {
 
 	//사용자가 입력한 정보에 따라 데이터를 수정하는 메소드
 	public void updateResult(int id) {
-		String query = "UPDATE db2024_evaluation SET score = ?, comment = ? WHERE evaluationid = ?";
+		String query1 = "UPDATE db2024_evaluation SET score = ? WHERE evaluationid = ?";
+		String query2 = "UPDATE db2024_evaluation SET comment = ? WHERE evaluationid = ?";
 		try (Connection conn = DatabaseConnection.getConnection();
-			 PreparedStatement pStmt = conn.prepareStatement(query)) {
+			 PreparedStatement pStmt = conn.prepareStatement(query1)) {
 			//트랜젝션을 위해 오토커밋 해제
 			conn.setAutoCommit(false);
 			pStmt.setInt(1, Integer.parseInt(score.getText()));
-			pStmt.setString(2, review.getText());
-			pStmt.setInt(3, id);
+			pStmt.setInt(2, id);
 			pStmt.executeUpdate();
+			PreparedStatement pStmt2 = conn.prepareStatement(query2);
+			pStmt2.setString(1, review.getText());
+			pStmt2.setInt(2, id);
+			pStmt2.executeUpdate();
 			conn.commit();
 			System.out.println("수정 완료");
 			//오토커밋 설정

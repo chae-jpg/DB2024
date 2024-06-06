@@ -62,7 +62,7 @@ public class ProfessorGradeDelete extends JFrame {
 
 		title = new JLabel("성적 삭제");
 		title.setFont(new Font("Lucida Grande", Font.PLAIN, 27));
-		title.setBounds(332, 24, 101, 55);
+		title.setBounds(332, 24, 118, 55);
 		panel.add(title);
 
 		searchTextField = new JTextField("학번 or 강의id를 입력하세요");
@@ -78,7 +78,7 @@ public class ProfessorGradeDelete extends JFrame {
 				searchGrade(selectedItem, searchText); // searchGrade메서드에 인자로 selectedItem, searchText를 넘긴다.
 			}
 		});
-		btnSearch.setBounds(554, 97, 58, 29);
+		btnSearch.setBounds(554, 97, 81, 29);
 		panel.add(btnSearch);
 
 		homeButton = new JButton("home"); // StartProfessor로 가는 홈 버튼 생성했다.
@@ -90,7 +90,7 @@ public class ProfessorGradeDelete extends JFrame {
 			}
 		});
 		homeButton.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
-		homeButton.setBounds(6, 6, 63, 29);
+		homeButton.setBounds(6, 6, 81, 29);
 		panel.add(homeButton);
 
 		comboBox = new JComboBox<>();

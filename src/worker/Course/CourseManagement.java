@@ -86,7 +86,7 @@ public class CourseManagement extends JFrame {
 			}
 		});
 		homeButton.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
-		homeButton.setBounds(6, 6, 63, 29);
+		homeButton.setBounds(6, 6, 88, 29);
 		panel.add(homeButton);
 	}
 }

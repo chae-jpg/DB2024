@@ -49,9 +49,9 @@ public class WorkerStart extends JFrame {
 		contentPane.add(panel);
 		panel.setLayout(null);
 
-		title = new JLabel("학사 관리 시스템");
+		title = new JLabel("직원 학사 관리 시스템");
 		title.setFont(new Font("Lucida Grande", Font.PLAIN, 27));
-		title.setBounds(287, 30, 219, 55);
+		title.setBounds(252, 30, 276, 55);
 		panel.add(title);
 
 		btn1 = new JButton("1. 학생 관리");

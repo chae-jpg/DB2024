@@ -74,7 +74,7 @@ public class StudentManagement extends JFrame {
 				searchStudents(selectedItem, searchText);
 			}
 		});
-		btnSearch.setBounds(554, 97, 58, 29);
+		btnSearch.setBounds(554, 97, 81, 29);
 		panel.add(btnSearch);
 
 		homeButton = new JButton("home");

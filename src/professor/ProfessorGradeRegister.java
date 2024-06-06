@@ -71,69 +71,69 @@ public class ProfessorGradeRegister extends JFrame {
 
 		title = new JLabel("성적 등록 ");
 		title.setFont(new Font("Lucida Grande", Font.PLAIN, 27));
-		title.setBounds(332, 24, 115, 55);
+		title.setBounds(332, 24, 150, 55);
 		panel.add(title);
 
 		textGrade = new JLabel("성적");
 		textGrade.setFont(new Font("Lucida Grande", Font.PLAIN, 20));
-		textGrade.setBounds(94, 104, 39, 55);
+		textGrade.setBounds(57, 104, 65, 55);
 		panel.add(textGrade);
 
 		ButtonGroup bg = new ButtonGroup(); // ButtonGroup을 통해 여러 개의 RadioButton 중 하나만 선택할 수 있게 해준다.
 
 		// 아래는 A+~NP까지의 성적을 라디오 버튼으로 만든 것이다.
 		rdbtnAplus = new JRadioButton("A+");
-		rdbtnAplus.setBounds(145, 122, 61, 23);
+		rdbtnAplus.setBounds(145, 122, 48, 23);
 		bg.add(rdbtnAplus);
 		panel.add(rdbtnAplus);
 
 		rdbtnA0 = new JRadioButton("A0");
-		rdbtnA0.setBounds(197, 122, 61, 23);
+		rdbtnA0.setBounds(197, 122, 51, 23);
 		bg.add(rdbtnA0);
 		panel.add(rdbtnA0);
 
 		rdbtnAminus = new JRadioButton("A-");
-		rdbtnAminus.setBounds(252, 122, 61, 23);
+		rdbtnAminus.setBounds(252, 122, 47, 23);
 		bg.add(rdbtnAminus);
 		panel.add(rdbtnAminus);
 
 		rdbtnBplus = new JRadioButton("B+");
-		rdbtnBplus.setBounds(303, 122, 61, 23);
+		rdbtnBplus.setBounds(303, 122, 44, 23);
 		bg.add(rdbtnBplus);
 		panel.add(rdbtnBplus);
 
 		rdbtnB0 = new JRadioButton("B0");
-		rdbtnB0.setBounds(351, 122, 61, 23);
+		rdbtnB0.setBounds(351, 122, 47, 23);
 		bg.add(rdbtnB0);
 		panel.add(rdbtnB0);
 
 		rdbtnBminus = new JRadioButton("B-");
-		rdbtnBminus.setBounds(402, 122, 61, 23);
+		rdbtnBminus.setBounds(402, 122, 46, 23);
 		bg.add(rdbtnBminus);
 		panel.add(rdbtnBminus);
 
 		rdbtnCplus = new JRadioButton("C+");
-		rdbtnCplus.setBounds(452, 122, 61, 23);
+		rdbtnCplus.setBounds(452, 122, 46, 23);
 		bg.add(rdbtnCplus);
 		panel.add(rdbtnCplus);
 
 		rdbtnC0 = new JRadioButton("C0");
-		rdbtnC0.setBounds(502, 122, 61, 23);
+		rdbtnC0.setBounds(502, 122, 46, 23);
 		bg.add(rdbtnC0);
 		panel.add(rdbtnC0);
 
 		rdbtnCminus = new JRadioButton("C-");
-		rdbtnCminus.setBounds(552, 122, 61, 23);
+		rdbtnCminus.setBounds(552, 122, 49, 23);
 		bg.add(rdbtnCminus);
 		panel.add(rdbtnCminus);
 
 		rdbtF = new JRadioButton("F");
-		rdbtF.setBounds(605, 122, 61, 23);
+		rdbtF.setBounds(605, 122, 44, 23);
 		bg.add(rdbtF);
 		panel.add(rdbtF);
 
 		rdbtnP = new JRadioButton("P");
-		rdbtnP.setBounds(653, 122, 61, 23);
+		rdbtnP.setBounds(653, 122, 48, 23);
 		bg.add(rdbtnP);
 		panel.add(rdbtnP);
 
@@ -144,17 +144,17 @@ public class ProfessorGradeRegister extends JFrame {
 
 		textSemester = new JLabel("학기");
 		textSemester.setFont(new Font("Lucida Grande", Font.PLAIN, 20));
-		textSemester.setBounds(94, 191, 39, 55);
+		textSemester.setBounds(57, 191, 65, 55);
 		panel.add(textSemester);
 
 		textCourse = new JLabel("강의");
 		textCourse.setFont(new Font("Lucida Grande", Font.PLAIN, 20));
-		textCourse.setBounds(94, 281, 39, 55);
+		textCourse.setBounds(57, 281, 65, 55);
 		panel.add(textCourse);
 
 		textStudent = new JLabel("학생");
 		textStudent.setFont(new Font("Lucida Grande", Font.PLAIN, 20));
-		textStudent.setBounds(94, 380, 39, 55);
+		textStudent.setBounds(57, 380, 65, 55);
 		panel.add(textStudent);
 
 		textFieldSemester = new JTextField();
@@ -185,7 +185,7 @@ public class ProfessorGradeRegister extends JFrame {
 		});
 
 		homeButton.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
-		homeButton.setBounds(6, 6, 63, 29);
+		homeButton.setBounds(6, 6, 93, 29);
 		panel.add(homeButton);
 
 		btnRegister.addActionListener(new ActionListener() {

@@ -40,9 +40,9 @@ public class StudentStart extends JFrame {
         contentPane.add(panel);
         panel.setLayout(null);
 
-        title = new JLabel("학사 관리 시스템");
+        title = new JLabel("학생 학사 관리 시스템");
         title.setFont(new Font("Lucida Grande", Font.PLAIN, 27));
-        title.setBounds(285, 33, 251, 55);
+        title.setBounds(257, 33, 279, 55);
         panel.add(title);
 
         btn1 = new JButton("1. 교수 조회");

@@ -64,7 +64,7 @@ public class ProfessorGradeEdit extends JFrame {
 
 		title = new JLabel("성적 수정");
 		title.setFont(new Font("Lucida Grande", Font.PLAIN, 27));
-		title.setBounds(332, 24, 101, 55);
+		title.setBounds(332, 24, 139, 55);
 		panel.add(title);
 
 		searchTextField = new JTextField("학번 or 강의id를 입력하세요"); // 입력으로 학번 또는 강의 id를 받아온다.
@@ -80,7 +80,7 @@ public class ProfessorGradeEdit extends JFrame {
 				searchGrade(selectedItem, searchText);
 			}
 		});
-		btnSearch.setBounds(554, 97, 58, 29);
+		btnSearch.setBounds(554, 97, 75, 29);
 		panel.add(btnSearch);
 
 		homeButton = new JButton("home"); // StartProfessor로 가는 홈 버튼 생성했다.
@@ -92,7 +92,7 @@ public class ProfessorGradeEdit extends JFrame {
 			}
 		});
 		homeButton.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
-		homeButton.setBounds(6, 6, 63, 29);
+		homeButton.setBounds(6, 6, 91, 29);
 		panel.add(homeButton);
 
 		comboBox = new JComboBox<>();

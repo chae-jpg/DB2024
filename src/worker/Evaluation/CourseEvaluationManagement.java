@@ -59,7 +59,7 @@ public class CourseEvaluationManagement extends JFrame {
         title.setBounds(315, 21, 173, 55);
         panel.add(title);
 
-        searchTextField = new JTextField("강의명 or 학수번호를 입력하세요");
+        searchTextField = new JTextField("강의명 or 강의id를 입력하세요");
         searchTextField.setBounds(214, 97, 344, 26);
         panel.add(searchTextField);
         searchTextField.setColumns(10);
@@ -72,7 +72,7 @@ public class CourseEvaluationManagement extends JFrame {
                 searchEvaluations(selectedItem, searchText);
             }
         });
-        btnSearch.setBounds(554, 97, 58, 29);
+        btnSearch.setBounds(554, 97, 75, 29);
         panel.add(btnSearch);
 
         homeButton = new JButton("home");
@@ -88,7 +88,7 @@ public class CourseEvaluationManagement extends JFrame {
         panel.add(homeButton);
 
         comboBox = new JComboBox<>();
-        String[] options = { "강의명", "학수번호" };
+        String[] options = { "강의명", "강의id" };
         comboBox.setModel(new DefaultComboBoxModel<>(options));
         comboBox.setSelectedItem("강의명"); // 기본 선택
         comboBox.setBounds(101, 98, 101, 27);
@@ -132,7 +132,7 @@ public class CourseEvaluationManagement extends JFrame {
                 int courseID = Integer.parseInt(value);
                 evaluations = courseEvaluationDAO.getEvaluationsByCourseID(courseID);
             } catch (NumberFormatException e) {
-                JOptionPane.showMessageDialog(panel, "유효한 학수번호를 입력하세요.", "입력 오류", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(panel, "유효한 강의id를 입력하세요.", "입력 오류", JOptionPane.ERROR_MESSAGE);
                 return;
             }
         }

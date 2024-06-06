@@ -48,16 +48,16 @@ public class StudentsByCourseView extends JFrame {
 
 		JLabel title = new JLabel("강의 별 수강자 명단 조회");
 		title.setFont(new Font("Lucida Grande", Font.PLAIN, 27));
-		title.setBounds(250, 30, 300, 50);
+		title.setBounds(228, 30, 322, 50);
 		contentPane.add(title);
 
-		searchTextField = new JTextField("강의명 or 학수번호를 입력하세요");
+		searchTextField = new JTextField("강의명 or 강의id를 입력하세요");
 		searchTextField.setBounds(214, 97, 344, 26);
 		contentPane.add(searchTextField);
 		searchTextField.setColumns(10);
 
 		comboBox = new JComboBox<>();
-		String[] options = { "강의명", "학수번호" };
+		String[] options = { "강의명", "강의id" };
 		comboBox.setModel(new DefaultComboBoxModel<>(options));
 		comboBox.setSelectedItem("강의명"); // 기본 선택
 		comboBox.setBounds(101, 98, 101, 27);
@@ -71,7 +71,7 @@ public class StudentsByCourseView extends JFrame {
 				searchStudents(selectedItem, searchText);
 			}
 		});
-		btnSearch.setBounds(554, 97, 58, 29);
+		btnSearch.setBounds(554, 97, 89, 29);
 		contentPane.add(btnSearch);
 
 		JButton homeButton = new JButton("home");
@@ -102,7 +102,7 @@ public class StudentsByCourseView extends JFrame {
 				int courseID = Integer.parseInt(value);
 				students = courseDAO.getStudentsByCourseID(courseID);
 			} catch (NumberFormatException e) {
-				JOptionPane.showMessageDialog(contentPane, "유효한 학수번호를 입력하세요.", "입력 오류", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(contentPane, "유효한 강의id를 입력하세요.", "입력 오류", JOptionPane.ERROR_MESSAGE);
 				return;
 			}
 		}

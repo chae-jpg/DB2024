@@ -64,14 +64,14 @@ public class CourseEvaluationManagementStudent extends JFrame {
 		}
 	}
 	
-	//강의명과 학수번호에 따라 강의평가를 검색하는 메소드
+	//강의명과 강의id에 따라 강의평가를 검색하는 메소드
 	private void searchEval(String selectedItem, String searchText) {
 		String sql = "";
 
 		if (selectedItem.equals("강의명")) {
 			//중첩쿼리를 사용해 해당 강의명을 가진 모든 강의평을 뷰에서 조회
 			sql = "SELECT * FROM DB2024_EvaluationView WHERE CourseID = (SELECT CourseID FROM DB2024_COURSE WHERE CourseName=?)";
-		} else if (selectedItem.equals("학수번호")) {
+		} else if (selectedItem.equals("강의id")) {
 			sql = "SELECT * FROM DB2024_EvaluationView WHERE CourseId=?";
 		}
 
@@ -160,7 +160,7 @@ public class CourseEvaluationManagementStudent extends JFrame {
 		title.setBounds(315, 21, 173, 55);
 		panel.add(title);
 
-		searchTextField = new JTextField("강의명 or 학수번호를 입력하세요");
+		searchTextField = new JTextField("강의명 or 강의id를 입력하세요");
 		searchTextField.setBounds(214, 97, 344, 26);
 		panel.add(searchTextField);
 		searchTextField.setColumns(10);
@@ -173,7 +173,7 @@ public class CourseEvaluationManagementStudent extends JFrame {
 				searchEval(selectedItem, searchText);
 			}
 		});
-		btnSearch.setBounds(554, 97, 58, 29);
+		btnSearch.setBounds(554, 97, 90, 29);
 		panel.add(btnSearch);
 
 		homeButton = new JButton("home");
@@ -189,7 +189,7 @@ public class CourseEvaluationManagementStudent extends JFrame {
 		panel.add(homeButton);
 
 		comboBox = new JComboBox<>();
-		String[] options = {"강의명", "학수번호"};
+		String[] options = {"강의명", "강의id"};
 		comboBox.setModel(new DefaultComboBoxModel<>(options));
 		comboBox.setSelectedItem("강의명");
 		comboBox.setBounds(101, 98, 101, 27);

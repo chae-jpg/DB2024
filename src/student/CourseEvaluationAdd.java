@@ -89,7 +89,7 @@ public class CourseEvaluationAdd extends JFrame {
 		lblNewLabel_2.setBounds(61, 246, 68, 32);
 		getContentPane().add(lblNewLabel_2);
 
-		JLabel lblNewLabel_3 = new JLabel("학수번호");
+		JLabel lblNewLabel_3 = new JLabel("강의id");
 		lblNewLabel_3.setFont(new Font("굴림", Font.PLAIN, 20));
 		lblNewLabel_3.setBounds(61, 118, 97, 32);
 		getContentPane().add(lblNewLabel_3);

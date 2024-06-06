@@ -52,10 +52,10 @@ public class ProfessorStudentsByCourse extends JFrame {
 
 		title = new JLabel("수강자 조회");
 		title.setFont(new Font("Lucida Grande", Font.PLAIN, 27));
-		title.setBounds(323, 24, 124, 55);
+		title.setBounds(323, 24, 158, 55);
 		panel.add(title);
 
-		searchTextField = new JTextField("강의명 or 학수번호를 입력하세요");
+		searchTextField = new JTextField("강의명 or 강의id를 입력하세요");
 		searchTextField.setBounds(214, 97, 344, 26);
 		panel.add(searchTextField);
 		searchTextField.setColumns(10);
@@ -84,7 +84,7 @@ public class ProfessorStudentsByCourse extends JFrame {
 		panel.add(homeButton);
 
 		comboBox = new JComboBox<>();
-		String[] options = { "강의명", "학수번호" };
+		String[] options = { "강의명", "강의id" };
 		comboBox.setModel(new DefaultComboBoxModel<>(options));
 		comboBox.setSelectedItem("강의명"); // 기본 선택
 		comboBox.setBounds(101, 98, 101, 27);

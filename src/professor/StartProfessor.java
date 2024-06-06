@@ -57,7 +57,7 @@ public class StartProfessor extends JFrame {
 
         title = new JLabel("교수 학사 관리 시스템");
         title.setFont(new Font("Lucida Grande", Font.PLAIN, 27));
-        title.setBounds(258, 35, 249, 55);
+        title.setBounds(246, 35, 279, 55);
         panel.add(title);
 
         btn1 = new JButton("1. 학생 정보 조회");

@@ -57,7 +57,7 @@ public class GradeManagement extends JFrame {
 
         title = new JLabel("성적 관리");
         title.setFont(new Font("Lucida Grande", Font.PLAIN, 27));
-        title.setBounds(332, 24, 101, 55);
+        title.setBounds(332, 24, 126, 55);
         panel.add(title);
 
         searchTextField = new JTextField("학번 or 강의id를 입력하세요");
@@ -76,7 +76,7 @@ public class GradeManagement extends JFrame {
 
             }
         });
-        btnSearch.setBounds(554, 97, 58, 29);
+        btnSearch.setBounds(554, 97, 87, 29);
         panel.add(btnSearch);
 
         homeButton = new JButton("home");
@@ -88,7 +88,7 @@ public class GradeManagement extends JFrame {
             }
         });
         homeButton.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
-        homeButton.setBounds(6, 6, 63, 29);
+        homeButton.setBounds(6, 6, 93, 29);
         panel.add(homeButton);
 
         comboBox = new JComboBox<>();

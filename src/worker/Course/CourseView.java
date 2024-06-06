@@ -61,7 +61,7 @@ public class CourseView extends JFrame {
 		title.setBounds(318, 24, 121, 55);
 		panel.add(title);
 
-		searchTextField = new JTextField("강의명 or 학수번호 or 교수명을 입력하세요");
+		searchTextField = new JTextField("강의명 or 강의id or 교수명을 입력하세요");
 		searchTextField.setBounds(214, 97, 344, 26);
 		panel.add(searchTextField);
 		searchTextField.setColumns(10);
@@ -74,7 +74,7 @@ public class CourseView extends JFrame {
 				searchCourses(selectedItem, searchText);
 			}
 		});
-		btnSearch.setBounds(554, 97, 58, 29);
+		btnSearch.setBounds(554, 97, 83, 29);
 		panel.add(btnSearch);
 
 		homeButton = new JButton("home");
@@ -90,7 +90,7 @@ public class CourseView extends JFrame {
 		panel.add(homeButton);
 
 		comboBox = new JComboBox<>();
-		String[] options = { "강의명", "학수번호", "교수" };
+		String[] options = { "강의명", "강의id", "교수" };
 		comboBox.setModel(new DefaultComboBoxModel<>(options));
 		comboBox.setSelectedItem("강의명"); // 기본 선택
 		comboBox.setBounds(101, 98, 101, 27);
@@ -154,7 +154,7 @@ public class CourseView extends JFrame {
 		List<Course> courses;
 		if (criteria.equals("강의명")) {
 			courses = courseDAO.getCoursesByName(value);
-		} else if (criteria.equals("학수번호")) {
+		} else if (criteria.equals("강의id")) {
 			int courseID = Integer.parseInt(value);
 			courses = courseDAO.getCoursesByID(courseID);
 		} else {

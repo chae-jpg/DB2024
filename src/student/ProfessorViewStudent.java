@@ -66,7 +66,7 @@ public class ProfessorViewStudent extends JFrame {
 			}
 		});
 		homeButton.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
-		homeButton.setBounds(6, 6, 63, 29);
+		homeButton.setBounds(6, 6, 101, 29);
 		panel.add(homeButton);
 
 		comboBox = new JComboBox<>();

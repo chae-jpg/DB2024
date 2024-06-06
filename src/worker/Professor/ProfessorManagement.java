@@ -74,7 +74,7 @@ public class ProfessorManagement extends JFrame {
 				searchProfessors(selectedItem, searchText);
 			}
 		});
-		btnSearch.setBounds(554, 97, 58, 29);
+		btnSearch.setBounds(554, 97, 75, 29);
 		panel.add(btnSearch);
 
 		homeButton = new JButton("home");

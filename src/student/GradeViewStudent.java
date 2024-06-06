@@ -76,7 +76,7 @@ public class GradeViewStudent extends JFrame {
 
             }
         });
-        btnSearch.setBounds(554, 97, 58, 29);
+        btnSearch.setBounds(554, 97, 77, 29);
         panel.add(btnSearch);
 
         homeButton = new JButton("home");
